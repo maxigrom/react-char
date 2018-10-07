@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.1.2",
+    "@material-ui/icons": "^3.0.1",
     "flow-bin": "^0.82.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "classnames": "latest"
   },
   "scripts": {
     "start": "webpack-dev-server --hot --config webpack.dev.config.babel.js",
@@ -25,12 +27,14 @@
     "babel-loader": "^8.0.4",
     "babel-plugin-flow-react-proptypes": "^24.1.2",
     "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^1.0.0",
     "eslint": "^5.6.1",
     "eslint-plugin-flowtype": "^2.50.3",
     "favicons-webpack-plugin": "0.0.9",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.3.1",
+    "mini-css-extract-plugin": "^0.4.3",
     "react-hot-loader": "^4.3.11",
     "svgo-loader": "^2.2.0",
     "webpack": "^4.20.2",

@@ -1,5 +1,6 @@
 import path from 'path';
 import HtmlWebPackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
 const faviconsPlugin = new FaviconsWebpackPlugin('./assets/favicon.jpg');
@@ -9,11 +10,17 @@ const htmlPlugin = new HtmlWebPackPlugin({
   filename: './index.html',
 });
 
+const cssExtractPlugin = new MiniCssExtractPlugin({
+  filename: '[name].[hash].css',
+  chunkFilename: '[id].[hash].css'
+});
+
+
 export const distPath = 'build';
 export const absoluteDistPath = path.resolve('./', distPath);
 
 export const getBaseConfig = (minimize = false) => ({
-  entry: './src/index.jsx',
+  entry: './src/index.js',
 
   output: {
     path: absoluteDistPath,
@@ -27,6 +34,17 @@ export const getBaseConfig = (minimize = false) => ({
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            // translates CSS into CommonJS
+            loader: 'css-loader',
+            options: { minimize: minimize }
+          }
+        ]
       },
       {
         test: /\.(gif|png|jpe?g)$/i,
@@ -61,5 +79,5 @@ export const getBaseConfig = (minimize = false) => ({
     extensions: ['.js', '.jsx'],
   },
 
-  plugins: [htmlPlugin, faviconsPlugin],
+  plugins: [htmlPlugin, cssExtractPlugin, faviconsPlugin],
 });

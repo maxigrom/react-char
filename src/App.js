@@ -4,19 +4,25 @@ import { hot } from 'react-hot-loader';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import DefaultTheme from './App/DefaultTheme';
-import App from './App';
+import Typography from '@material-ui/core/Typography';
+import Layout from './App/Layout';
+import Chat from './App/Chat';
 
-class AppWrapper extends React.Component<> {
-  render = () => {
+class App extends React.Component {
+  render() {
+    const { classes } = this.props;
+
     return (
       <>
-      <CssBaseline />
+      <CssBaseline/>
       <MuiThemeProvider theme={DefaultTheme}>
-        <App />
+        <Layout>
+          <Chat />
+        </Layout>
       </MuiThemeProvider>
       </>
     );
   }
 }
 
-export default hot(module)(AppWrapper);
+export default hot(module)(App);
