@@ -4,21 +4,15 @@ import { hot } from 'react-hot-loader';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import DefaultTheme from './App/DefaultTheme';
-import Typography from '@material-ui/core/Typography';
-import Layout from './App/Layout';
-import Chat from './App/Chat';
+import Chat from './Pages/Chat';
 
 class App extends React.Component {
-  render() {
-    const { classes } = this.props;
-
+  render = () => {
     return (
       <>
       <CssBaseline/>
       <MuiThemeProvider theme={DefaultTheme}>
-        <Layout>
-          <Chat />
-        </Layout>
+        <Chat/>
       </MuiThemeProvider>
       </>
     );
