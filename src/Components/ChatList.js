@@ -10,24 +10,22 @@ import ChatListItem from './ChatList/ChatListItem';
 import List from '@material-ui/core/List';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import ButtonAddChat from './ChatList/ButtonAddChat';
+import ChatNavigation from './ChatList/ChatNavigation';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
-  searchChats: {
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px 0 ${theme.spacing.unit * 3}px`,
+  container: {
+    width: '100%',
   },
-  buttonAdd: {
-    position: 'absolute',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 4
+  searchChats: {
+    padding: theme.spacing.unit * 2,
   },
   chatList: {
-    height: '100%',
-    overflowY: 'auto'
+    height: `calc(100% - ${theme.mixins.toolbar.minHeight * 2}px)`,
+    overflowY: 'auto',
   },
 });
-
-const DATA = ChatListData;
 
 type Props = {
   chats: TChat[]
@@ -41,21 +39,21 @@ class ChatList extends React.Component<Props> {
 
     return (
       <>
-        <div className={classes.toolbar}>
-          <div className={classes.searchChats}>
-            <Input
-              fullWidth
-              placeholder='Search chats...'
-            />
-          </div>
+      <div className={classes.toolbar}>
+        <div className={classes.searchChats}>
+          <Input
+            fullWidth
+            placeholder='Search chats...'
+          />
         </div>
-        <Divider />
-        <List className={classes.chatList}>
-          {chats.map(chat => <ChatListItem key={chat.id} chat={chat} />)}
-        </List>
-        <Button variant="fab" color="primary" aria-label="Add" className={classes.buttonAdd}>
-          <AddIcon />
-        </Button>
+      </div>
+      <Divider />
+      <List className={classes.chatList}>
+        {chats.map(chat => <ChatListItem key={chat.id} chat={chat} />)}
+      </List>
+      <Divider />
+      <ButtonAddChat />
+      <ChatNavigation />
       </>
     );
   };

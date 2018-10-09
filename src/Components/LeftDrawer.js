@@ -13,6 +13,7 @@ const styles = theme => ({
   drawerPaper: {
     position: 'fixed',
     width: StyleConstants.DrawerWidth,
+    overflowX: 'hidden',
   },
 });
 

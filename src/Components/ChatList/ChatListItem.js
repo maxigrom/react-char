@@ -10,7 +10,7 @@ type Props = {
   chat: TChat,
 };
 
-export default class ChatListItem extends React.Component<Props> {
+class ChatListItem extends React.Component<Props> {
   props: Props;
 
   render = () => {
@@ -23,3 +23,5 @@ export default class ChatListItem extends React.Component<Props> {
     );
   };
 }
+
+export default ChatListItem;
