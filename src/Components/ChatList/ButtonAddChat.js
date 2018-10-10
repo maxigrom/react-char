@@ -7,8 +7,8 @@ import AddIcon from '@material-ui/icons/Add';
 const styles = theme => ({
   buttonAdd: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 4,
+    bottom: theme.mixins.toolbar.minHeight + theme.spacing.sm,
+    right:theme.spacing.md,
   },
 });
 

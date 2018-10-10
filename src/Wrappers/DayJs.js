@@ -6,5 +6,4 @@ dayjs.locale('ru');
 dayjs.extend(relativeTime);
 
 const DayJs = dayjs;
-
 export default DayJs;

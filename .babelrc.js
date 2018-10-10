@@ -6,7 +6,7 @@ module.exports = {
   ],
   'plugins': [
     '@babel/plugin-proposal-class-properties', // Allows use () => {} in class and don't use bind()
-    // 'react-hot-loader/babel',
-    // 'flow-react-proptypes', // Translate flow types to prop-types
+    'react-hot-loader/babel',
+    'flow-react-proptypes', // Translate flow types to prop-types
   ],
 };

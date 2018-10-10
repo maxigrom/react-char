@@ -4,7 +4,8 @@ import ListItem from '@material-ui/core/ListItem';
 import type { TChat } from '../../Data/ChatList.data';
 import Meow from '../Meow';
 import ListItemText from '@material-ui/core/es/ListItemText/ListItemText';
-import DateHelper from '../../Helpers/DateHelper';
+import DateHelper from '../../utils/DateHelper';
+import TextAvatar from '../TextAvatar';
 
 type Props = {
   chat: TChat,
@@ -17,7 +18,7 @@ class ChatListItem extends React.Component<Props> {
     const { chat } = this.props;
     return (
       <ListItem button>
-        <Meow />
+        <TextAvatar value={chat.name} />
         <ListItemText primary={chat.name} secondary={DateHelper.toStringFromNow(chat.updatedAt)} />
       </ListItem>
     );

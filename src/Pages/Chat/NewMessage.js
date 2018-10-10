@@ -11,10 +11,10 @@ const styles = theme => ({
   newMessage: {
     position: 'fixed',
     top: 'auto',
-    left: StyleConstants.DrawerWidth + theme.spacing.unit * 2,
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 4,
-    padding: theme.spacing.unit * 2,
+    left: StyleConstants.DrawerWidth + theme.spacing.sm,
+    bottom: theme.spacing.sm,
+    right:theme.spacing.md,
+    padding: theme.spacing.sm,
   },
 });
 

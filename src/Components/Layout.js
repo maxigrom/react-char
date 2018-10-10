@@ -18,7 +18,7 @@ const styles = theme => ({
     overflowY: 'scroll',
     backgroundColor: theme.palette.background.default,
     marginTop: theme.mixins.toolbar.minHeight + theme.spacing.unit,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.sm,
   },
   contentWithDrawer: {
     left: StyleConstants.DrawerWidth

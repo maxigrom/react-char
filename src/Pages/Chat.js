@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import type { TChatMessage } from '../Data/ChatMessages.data';
+import { withStyles } from '@material-ui/core';
 import ChatMessage from './Chat/ChatMessage';
 import Layout from '../Components/Layout';
 import { ChatListData } from '../Data/ChatList.data';
@@ -8,23 +8,27 @@ import { ChatMessagesData } from '../Data/ChatMessages.data';
 import Grid from '@material-ui/core/es/Grid/Grid';
 import NewMessage from './Chat/NewMessage';
 
-type Props = {
-  chatMessages: TChatMessage[]
-};
+type Props = {};
 
 const CURRENT_USER_ID = 2;
 
-class Chat extends React.Component<Props, State> {
-  props: Props;
+const styles = theme => ({
+  chatContainer: {
+    marginBottom: theme.mixins.toolbar.minHeight + theme.spacing.sm,
+  }
+});
+
+class Chat extends React.Component<Props> {
 
   render = () => {
-    const { chatMessages } = this.props;
+    const { chatMessages, classes } = this.props;
     return (
       <Layout chats={ChatListData} showDrawer>
         <Grid
           container
           spacing={16}
           direction='column'
+          className={classes.chatContainer}
           alignItems={'flex-start'}
         >
           {ChatMessagesData.map((chatMessage, i) => (
@@ -42,4 +46,4 @@ class Chat extends React.Component<Props, State> {
   };
 }
 
-export default Chat;
+export default withStyles(styles)(Chat);

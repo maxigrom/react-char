@@ -19,7 +19,7 @@ const styles = theme => ({
     width: '100%',
   },
   searchChats: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.sm,
   },
   chatList: {
     height: `calc(100% - ${theme.mixins.toolbar.minHeight * 2}px)`,

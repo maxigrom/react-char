@@ -1,45 +1,40 @@
 // @flow
 import * as React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import yellow from '@material-ui/core/colors/yellow';
 import green from '@material-ui/core/colors/green';
-import classnames from 'classnames';
 import Meow from '../../Components/Meow';
 import type { TChatMessage } from '../../Data/ChatMessages.data';
-import DateHelper from '../../Helpers/DateHelper';
+import DateHelper from '../../utils/DateHelper';
+import Paper from '@material-ui/core/Paper';
+import { getBackColor, getTextColor } from '../../utils/getColor';
+import TextAvatar from '../../Components/TextAvatar';
 
 const styles = theme => ({
   currentUserColor: {
     backgroundColor: yellow[100],
-    marginLeft: theme.spacing.unit * 8,
   },
   anotherUserColor: {
     backgroundColor: green[100],
   },
-  chatCard: {
-    borderRadius: '8px',
-    minWidth: 300,
-    maxWidth: 600,
-    padding: theme.spacing.unit * 1,
-  },
-  chatCardContent: {
-    padding: '0 !important',
-  },
-  chatCardContentWrapper: {
+  message: {
     display: 'flex',
-    flexFlow: 'row nowrap',
+    alignItems: 'flex-end'
   },
   avatar: {
-    marginRight: theme.spacing.unit * 1,
+    flex: '0 0 auto',
+    marginRight: theme.spacing.xs,
   },
-  chatText: {
-    width: '100%',
+  bubble: {
+    borderRadius: 8,
+    borderBottomLeftRadius: 0,
+    minWidth: 300,
+    flex: '0 1 600px',
+    padding: theme.spacing.xs,
   },
   time: {
-    marginTop: theme.spacing.unit * 1,
+    marginTop: theme.spacing.xs,
   },
 });
 
@@ -53,31 +48,26 @@ class ChatMessage extends React.Component<Props> {
 
   render = () => {
     const { chatMessage, isCurrentUser, classes } = this.props;
-    const colorClassName = isCurrentUser ? classes.currentUserColor : classes.anotherUserColor;
+
+    const login = chatMessage.user.login;
+    const textColor = getTextColor(login);
+    const backgroundColor = getBackColor(login);
 
     return (
-      <Card className={classnames(classes.chatCard, colorClassName)}>
-        <CardContent className={classes.chatCardContent}>
-          <div className={classes.chatCardContentWrapper}>
-            <div className={classes.avatar}>
-              <Meow />
-            </div>
-            <div className={classes.chatText}>
-              <Typography color='primary'>
-                <b>{chatMessage.user.login}</b>
-              </Typography>
-              <Typography>
-                {chatMessage.text}
-              </Typography>
-            </div>
-          </div>
-          <div className={classes.time}>
-            <Typography color='textSecondary'>
-              {DateHelper.toStringFromNow(chatMessage.createdAt)}
-            </Typography>
-          </div>
-        </CardContent>
-      </Card>
+      <div className={classes.message}>
+        <TextAvatar value={login} className={classes.avatar}/>
+        <Paper className={classes.bubble} style={{ backgroundColor: backgroundColor }}>
+          <Typography style={{ color: textColor }}>
+            <b>{login}</b>
+          </Typography>
+          <Typography>
+            {chatMessage.text}
+          </Typography>
+          <Typography className={classes.time} color='textSecondary'>
+            {DateHelper.toStringFromNow(chatMessage.createdAt)}
+          </Typography>
+        </Paper>
+      </div>
     );
   };
 }
