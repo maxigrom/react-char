@@ -5,7 +5,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ChatIcon from '@material-ui/icons/Chat';
 import ExploreIcon from '@material-ui/icons/Explore';
-import StyleConstants from '../../Consts/StyleConstants';
+import StyleConstants from '../../../Consts/StyleConstants';
 
 const styles = theme => ({
   navigation: {

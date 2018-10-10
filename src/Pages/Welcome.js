@@ -1,74 +1,78 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import Layout from '../Components/Layout';
+import LoginForm from './Welcome/LoginForm';
+import Paper from '@material-ui/core/Paper';
+import SignUpForm from './Welcome/SignUpForm';
 
-function TabContainer({ children, dir }) {
-  return (
-    <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
-      {children}
-    </Typography>
-  );
-}
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  dir: PropTypes.string.isRequired,
+type Props = {};
+type State = {
+  value: number,
 };
 
 const styles = theme => ({
   root: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing.lg
+  },
+  appBar: {
+    flex: '0 0 500px',
     backgroundColor: theme.palette.background.paper,
-    width: 500,
   },
 });
 
-class Welcome extends React.Component {
+class Welcome extends React.Component<Props, State> {
   state = {
-    value: 0,
+    tabIndex: 0,
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({ tabIndex: value });
   };
 
   handleChangeIndex = index => {
-    this.setState({ value: index });
+    this.setState({ tabIndex: index });
   };
 
-  render() {
+  render = () => {
     const { classes, theme } = this.props;
+    const { tabIndex } = this.state;
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            fullWidth
-          >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-          </Tabs>
-        </AppBar>
-        <SwipeableViews
-          index={this.state.value}
-          onChangeIndex={this.handleChangeIndex}
-        >
-          <TabContainer dir={theme.direction}>Item One</TabContainer>
-          <TabContainer dir={theme.direction}>Item Two</TabContainer>
-          <TabContainer dir={theme.direction}>Item Three</TabContainer>
-        </SwipeableViews>
-      </div>
+      <>
+      <Layout.Menu />
+      <Layout.Body>
+        <div className={classes.root}>
+          <Paper className={classes.appBar}>
+            <AppBar position='static' color='default'>
+              <Tabs
+                value={tabIndex}
+                onChange={this.handleChange}
+                indicatorColor='primary'
+                textColor='primary'
+                fullWidth
+              >
+                <Tab label='Log in' />
+                <Tab label='Sign up' />
+              </Tabs>
+            </AppBar>
+            <SwipeableViews index={tabIndex} onChangeIndex={this.handleChangeIndex}>
+              <LoginForm />
+              <SignUpForm />
+            </SwipeableViews>
+          </Paper>
+        </div>
+      </Layout.Body>
+      </>
     );
-  }
+  };
 }
 
 export default withStyles(styles, { withTheme: true })(Welcome);
