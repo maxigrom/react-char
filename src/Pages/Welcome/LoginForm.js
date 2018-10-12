@@ -3,6 +3,8 @@ import * as React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import AuthApi from '../../Api/AuthApi';
+import type { TLoginUser } from '../../Types/TLoginUser';
 
 type Props = {};
 type State = {
@@ -40,12 +42,25 @@ class LoginForm extends React.Component<Props, State> {
     })
   };
 
+  handleOnLogin = async (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const user: TLoginUser = {
+      username: this.state.userName,
+      password: this.state.password
+    };
+
+    const response = await AuthApi.login(user);
+    const json = await response.json();
+    console.log(json);
+  };
+
   render = () => {
     const { classes } = this.props;
     const { userName, password } = this.state;
 
     return (
-      <form className={classes.container} noValidate autoComplete="off">
+      <form className={classes.container} onSubmit={this.handleOnLogin} autoComplete="off">
         <TextField
           name="userName"
           label="User Name"
@@ -63,7 +78,7 @@ class LoginForm extends React.Component<Props, State> {
           margin="normal"
           type="password"
         />
-        <Button variant="contained" color="primary" className={classes.submitButton}>
+        <Button type='submit' variant="contained" color="primary" className={classes.submitButton}>
           Log in
         </Button>
       </form>

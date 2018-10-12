@@ -12,9 +12,8 @@ const htmlPlugin = new HtmlWebPackPlugin({
 
 const cssExtractPlugin = new MiniCssExtractPlugin({
   filename: '[name].[hash].css',
-  chunkFilename: '[id].[hash].css'
+  chunkFilename: '[id].[hash].css',
 });
-
 
 export const distPath = 'build';
 export const absoluteDistPath = path.resolve('./', distPath);
@@ -42,9 +41,9 @@ export const getBaseConfig = (minimize = false) => ({
           {
             // translates CSS into CommonJS
             loader: 'css-loader',
-            options: { minimize: minimize }
-          }
-        ]
+            options: { minimize: minimize },
+          },
+        ],
       },
       {
         test: /\.(gif|png|jpe?g)$/i,

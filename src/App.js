@@ -1,4 +1,6 @@
 // @flow
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { MuiThemeProvider } from '@material-ui/core/styles';

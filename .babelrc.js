@@ -5,7 +5,8 @@ module.exports = {
     '@babel/preset-flow',
   ],
   'plugins': [
-    '@babel/plugin-proposal-class-properties', // Allows use () => {} in class and don't use bind()
+    '@babel/plugin-transform-runtime', // Allows to use async await
+    '@babel/plugin-proposal-class-properties', // Allows to use () => {} in class and don't use bind()
     'react-hot-loader/babel',
     'flow-react-proptypes', // Translate flow types to prop-types
   ],
