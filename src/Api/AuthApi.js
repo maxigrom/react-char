@@ -1,23 +1,22 @@
 // @flow
-
-import BasicApi from './Basic/BasicApi';
-import type { TApiSignUpResponse } from '../Types/Api/Responses/TApiSignUpResponse';
+import BasicApi, { getJsonWithResponse } from './Basic/BasicApi';
 import type { TLoginUser } from '../Types/TLoginUser';
+import type { TApiSignUpResponse, TSignUpJson } from '../Types/Api/Jsons/TSignUpJson';
 
 const API = new BasicApi();
 
 class AuthApi {
-  static signup = async (user: TLoginUser): Promise<Response> => {
-    return API.post('/signup', user);
-  };
+  static signup = async (user: TLoginUser): Promise => (
+    API.post('/signup', user)
+  );
 
-  static login = async (user: TLoginUser): Promise<Response> => {
-    return API.post('/login', user);
-  };
+  static login = async (user: TLoginUser): Promise => (
+    API.post('/login', user)
+  );
 
-  static logout = async (): Promise<Response> => {
-    return API.get('/logout');
-  };
+  static logout = async (): Promise => (
+    API.get('/logout')
+  );
 }
 
 export default AuthApi;

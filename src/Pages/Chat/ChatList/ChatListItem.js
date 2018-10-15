@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import type { TChat } from '../../../Data/ChatList.data';
 import Meow from '../../../Components/Meow';
 import ListItemText from '@material-ui/core/es/ListItemText/ListItemText';
-import DateHelper from '../../../utils/DateHelper';
+import DateHelper from '../../../Helpers/DateHelper';
 import TextAvatar from '../../../Components/TextAvatar';
 
 type Props = {

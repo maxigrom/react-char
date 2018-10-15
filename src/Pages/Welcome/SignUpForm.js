@@ -4,24 +4,21 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import type { TLoginUser } from '../../Types/TLoginUser';
-import AuthApi from '../../Api/AuthApi';
 import type { TValueWithError } from '../../Models/ValueWithError';
 import { newValueWithError } from '../../Models/ValueWithError';
-import { withSnackbar } from 'notistack';
-import type { FEnqueueSnackbar } from '../../Types/Libs/notistack/TEnqueueSnackbarFunction';
 import { Redirect } from 'react-router-dom';
 
-type Props = {
+type Props = {|
   classes: Object,
-  enqueueSnackbar: FEnqueueSnackbar,
-};
+  onSignUp: (user: TLoginUser) => void,
+  redirectToChat: boolean,
+|};
 
-type State = {
+type State = {|
   userName: TValueWithError<string>,
   password: TValueWithError<string>,
   passwordRepeat: TValueWithError<string>,
-  redirectOnSuccessSignUp: boolean,
-};
+|};
 
 const styles = theme => ({
   container: {
@@ -34,7 +31,8 @@ const styles = theme => ({
   },
   textField: {
     flex: '1 1 auto',
-    margin: theme.spacing.sm,
+    marginLeft: theme.spacing.sm,
+    marginRight: theme.spacing.sm,
   },
   submitButton: {
     flex: '1 1 auto',
@@ -49,7 +47,6 @@ class SignUpForm extends React.Component<Props, State> {
     userName: newValueWithError(''),
     password: newValueWithError(''),
     passwordRepeat: newValueWithError(''),
-    redirectOnSuccessLogin: false,
   };
 
   handleOnChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -68,7 +65,7 @@ class SignUpForm extends React.Component<Props, State> {
     const isValid = await this.validateForm();
     if (!isValid) return;
 
-    this.signup({
+    this.props.onSignUp({
       username: this.state.userName.value,
       password: this.state.password.value,
     });
@@ -109,25 +106,11 @@ class SignUpForm extends React.Component<Props, State> {
     });
   };
 
-  signup = async (user: TLoginUser) => {
-    const response = await AuthApi.signup(user);
-    const json = await response.json();
-    console.log(json);
-
-    this.props.enqueueSnackbar(json.message, { variant: json.success ? 'success' : 'error' });
-
-    if (json.success) {
-      this.setState({
-        redirectOnSuccessSignUp: true,
-      });
-    }
-  };
-
   render = () => {
-    const { classes } = this.props;
-    const { userName, password, passwordRepeat, redirectOnSuccessSignUp } = this.state;
+    const { classes, redirectToChat } = this.props;
+    const { userName, password, passwordRepeat } = this.state;
 
-    if (redirectOnSuccessSignUp) return (<Redirect to='/chat' push />);
+    if (redirectToChat) return (<Redirect to='/chat' push />);
 
     return (
       <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete='off'>
@@ -137,7 +120,7 @@ class SignUpForm extends React.Component<Props, State> {
           className={classes.textField}
           value={userName.value}
           error={!!userName.error}
-          helperText={userName.error}
+          helperText={userName.error || ' '}
           onChange={this.handleOnChange}
           margin='normal'
         />
@@ -148,7 +131,7 @@ class SignUpForm extends React.Component<Props, State> {
             className={classes.textField}
             value={password.value}
             error={!!password.error}
-            helperText={password.error}
+            helperText={password.error || ' '}
             onChange={this.handleOnChange}
             margin='normal'
             type='password'
@@ -159,7 +142,7 @@ class SignUpForm extends React.Component<Props, State> {
             className={classes.textField}
             value={passwordRepeat.value}
             error={!!passwordRepeat.error}
-            helperText={passwordRepeat.error}
+            helperText={passwordRepeat.error || ' '}
             onChange={this.handleOnChange}
             margin='normal'
             type='password'
@@ -173,4 +156,4 @@ class SignUpForm extends React.Component<Props, State> {
   };
 }
 
-export default withSnackbar(withStyles(styles)(SignUpForm));
+export default withStyles(styles)(SignUpForm);

@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Meow from '../Meow';
 import StyleConstants from '../../Consts/StyleConstants';
 import * as classnames from 'classnames';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   appBar: {
@@ -16,6 +17,9 @@ const styles = theme => ({
     top: 0,
     left: 0,
     right: 0,
+  },
+  grow: {
+    flexGrow: 1,
   },
   appBarWithDrawer: {
     width: `calc(100% - ${StyleConstants.DrawerWidth}px)`,
@@ -28,11 +32,13 @@ const styles = theme => ({
 });
 
 type Props = {
-  showDrawer?: boolean
-}
+  showDrawer?: boolean,
+  showLogoutButton: boolean,
+  onClickLogout: () => void,
+};
 
 const Menu = (props: Props) => {
-  const { showDrawer, classes } = props;
+  const { showDrawer, classes, showLogoutButton, onClickLogout } = props;
   const appBarClass = classnames({
     [classes.appBar]: true,
     [classes.appBarWithDrawer]: showDrawer,
@@ -44,9 +50,12 @@ const Menu = (props: Props) => {
         <IconButton className={classes.menuButton} color='inherit' aria-label='Menu'>
           <Meow />
         </IconButton>
-        <Typography variant='title' color='inherit'>
+        <Typography variant='title' color='inherit' className={classes.grow}>
           React Chat
         </Typography>
+        {showLogoutButton && (
+          <Button color='inherit' onClick={onClickLogout}>Logout</Button>
+        )}
       </Toolbar>
     </AppBar>
   );

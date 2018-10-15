@@ -1,5 +1,6 @@
 // @flow
 import urljoin from 'url-join';
+import type { Response } from '@types/node-fetch';
 
 export const getParams = (method: string, data?: mixed): Object => ({
   method: method,
@@ -10,7 +11,16 @@ export const getParams = (method: string, data?: mixed): Object => ({
   body: JSON.stringify(data),
 });
 
+
 const DEFAULT_URL = 'http://localhost:8000/v1/';
+
+function getJson(response) {
+  return response.json()
+    .then((json) => {
+      if (json.success) return json;
+      throw new Error(json.message);
+    });
+}
 
 class BasicApi {
   constructor(apiUrl: string = DEFAULT_URL) {
@@ -19,50 +29,21 @@ class BasicApi {
 
   getUrl = (url: string): string => urljoin(this.apiUrl, url);
 
-  get = async (url: string): Promise<Response> => {
-    try {
-      return fetch(this.getUrl(url), getParams("GET"));
-    } catch (e) {
-      console.error(e);
-      console.log({ getError: e.response });
+  get = async (url: string): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('GET')).then(getJson)
+  );
 
-      return e.response;
-    }
-  };
+  post = async (url: string, data: ?Object): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('POST', data)).then(getJson)
+  );
 
-  post = async (url: string, data: ?Object): Promise<Response> => {
-    try {
-      return fetch(this.getUrl(url), getParams("POST", data));
-    } catch (e) {
-      console.error(e);
-      console.log({ postError: e.response });
+  put = async (url: string, data: ?Object): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('PUT', data)).then(getJson)
+  );
 
-      return e.response;
-    }
-  };
-
-  put = async (url: string, data: ?Object): Promise<Response> => {
-    try {
-      return fetch(this.getUrl(url), getParams("PUT", data));
-    } catch (e) {
-      console.error(e);
-      console.log({ putError: e.response });
-
-      return e.response;
-    }
-  };
-
-  delete = async (url: string, data: ?Object): Promise<Response> => {
-    try {
-      return fetch(this.getUrl(url), getParams("DELETE", data));
-    } catch (e) {
-      console.error(e);
-      console.log({ deleteError: e.response });
-
-      return e.response;
-    }
-  };
+  delete = async (url: string, data: ?Object): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('DELETE', data)).then(getJson)
+  );
 }
 
 export default BasicApi;
-global.BasicApi = BasicApi;

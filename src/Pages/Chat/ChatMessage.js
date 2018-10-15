@@ -6,9 +6,9 @@ import yellow from '@material-ui/core/colors/yellow';
 import green from '@material-ui/core/colors/green';
 import Meow from '../../Components/Meow';
 import type { TChatMessage } from '../../Data/ChatMessages.data';
-import DateHelper from '../../utils/DateHelper';
+import DateHelper from '../../Helpers/DateHelper';
 import Paper from '@material-ui/core/Paper';
-import { getBackColor, getTextColor } from '../../utils/getColor';
+import { getBackColor, getTextColor } from '../../Helpers/getColor';
 import TextAvatar from '../../Components/TextAvatar';
 
 const styles = theme => ({

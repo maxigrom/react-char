@@ -1,5 +1,5 @@
 // @flow
-export type TBaseApiResponse<T> = T & {
+export type TBaseApiJson = {
   success: boolean,
   message: string,
 };

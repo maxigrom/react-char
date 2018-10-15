@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import { getColor } from '../utils/getColor';
+import { getColor } from '../Helpers/getColor';
 
 type Props = {
   className?: string,

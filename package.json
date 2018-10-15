@@ -19,9 +19,12 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-swipeable-views": "^0.13.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
     "url-join": "^4.0.0"
   },
   "devDependencies": {
@@ -33,6 +36,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.1.2",
+    "@types/node": "^10.11.7",
+    "@types/node-fetch": "^2.1.2",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
     "babel-plugin-flow-react-proptypes": "^24.1.2",

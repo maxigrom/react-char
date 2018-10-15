@@ -1,5 +1,4 @@
 // @flow
-
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
@@ -7,9 +6,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Layout from '../Components/Layout';
-import LoginForm from './Welcome/LoginForm';
 import Paper from '@material-ui/core/Paper';
-import SignUpForm from './Welcome/SignUpForm';
+import SignUpFormContainer from './Welcome/SignUpFormContainer';
+import LoginFormContainer from './Welcome/LoginFormContainer';
 
 type Props = {};
 type State = {
@@ -20,7 +19,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: theme.spacing.lg
+    marginTop: theme.spacing.lg,
   },
   appBar: {
     flex: '0 0 500px',
@@ -64,8 +63,8 @@ class Welcome extends React.Component<Props, State> {
               </Tabs>
             </AppBar>
             <SwipeableViews index={tabIndex} onChangeIndex={this.handleChangeIndex}>
-              <LoginForm />
-              <SignUpForm />
+              <LoginFormContainer />
+              <SignUpFormContainer />
             </SwipeableViews>
           </Paper>
         </div>

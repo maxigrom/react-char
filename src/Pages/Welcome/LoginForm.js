@@ -3,24 +3,21 @@ import * as React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import AuthApi from '../../Api/AuthApi';
 import type { TLoginUser } from '../../Types/TLoginUser';
 import type { TValueWithError } from '../../Models/ValueWithError';
 import { newValueWithError } from '../../Models/ValueWithError';
-import { withSnackbar } from 'notistack';
-import type { FEnqueueSnackbar } from '../../Types/Libs/notistack/TEnqueueSnackbarFunction';
 import { Redirect } from 'react-router-dom';
 
-type Props = {
+type Props = {|
   classes: Object,
-  enqueueSnackbar: FEnqueueSnackbar,
-};
+  redirectToChat: boolean,
+  onLogin: (user: TLoginUser) => void,
+|};
 
-type State = {
+type State = {|
   userName: TValueWithError<string>,
   password: TValueWithError<string>,
-  redirectOnSuccessLogin: boolean
-};
+|};
 
 const styles = theme => ({
   container: {
@@ -28,12 +25,13 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   textField: {
-    margin: theme.spacing.sm,
     width: '100%',
+    marginLeft: theme.spacing.sm,
+    marginRight: theme.spacing.sm,
   },
   submitButton: {
-    margin: theme.spacing.sm,
     width: '100%',
+    margin: theme.spacing.sm,
   },
 });
 
@@ -43,14 +41,13 @@ class LoginForm extends React.Component<Props, State> {
   state: State = {
     userName: newValueWithError(''),
     password: newValueWithError(''),
-    redirectOnSuccessLogin: false,
   };
 
   handleOnChange = (e: SyntheticEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     this.setState({
       [name]: {
-        value: value
+        value: value,
       },
     });
   };
@@ -59,9 +56,9 @@ class LoginForm extends React.Component<Props, State> {
     e.preventDefault();
 
     const isValid = await this.validateForm();
-    if(!isValid) return;
+    if (!isValid) return;
 
-    this.login({
+    this.props.onLogin({
       username: this.state.userName.value,
       password: this.state.password.value,
     });
@@ -75,12 +72,12 @@ class LoginForm extends React.Component<Props, State> {
         const newState = { ...prevState };
         if (prevState.userName.value.length === 0) {
           isValid = false;
-          newState.userName.error = "Please enter a user name";
+          newState.userName.error = 'Please enter a user name';
         }
 
         if (prevState.password.value.length === 0) {
           isValid = false;
-          newState.password.error = "Please enter a password";
+          newState.password.error = 'Please enter a password';
         }
 
         return newState;
@@ -88,25 +85,11 @@ class LoginForm extends React.Component<Props, State> {
     });
   };
 
-  login = async (user: TLoginUser) => {
-    const response = await AuthApi.login(user);
-    const json = await response.json();
-    console.log(json);
-
-    this.props.enqueueSnackbar(json.message, {variant: json.success ? 'success' : 'error'} );
-
-    if (json.success) {
-      this.setState({
-        redirectOnSuccessLogin: true,
-      });
-    }
-  };
-
   render = () => {
-    const { classes } = this.props;
-    const { userName, password, redirectOnSuccessLogin } = this.state;
+    const { classes, redirectToChat } = this.props;
+    const { userName, password } = this.state;
 
-    if(redirectOnSuccessLogin) return (<Redirect to='/chat' push />);
+    if (redirectToChat) return (<Redirect to='/chat' push />);
 
     return (
       <form className={classes.container} onSubmit={this.handleOnLogin} autoComplete='off'>
@@ -116,7 +99,7 @@ class LoginForm extends React.Component<Props, State> {
           className={classes.textField}
           value={userName.value}
           error={!!userName.error}
-          helperText={userName.error}
+          helperText={userName.error || ' '}
           onChange={this.handleOnChange}
           margin='normal'
         />
@@ -126,7 +109,7 @@ class LoginForm extends React.Component<Props, State> {
           className={classes.textField}
           value={password.value}
           error={!!password.error}
-          helperText={password.error}
+          helperText={password.error || ' '}
           onChange={this.handleOnChange}
           margin='normal'
           type='password'
@@ -139,4 +122,4 @@ class LoginForm extends React.Component<Props, State> {
   };
 }
 
-export default withSnackbar(withStyles(styles)(LoginForm));
+export default withStyles(styles)(LoginForm);

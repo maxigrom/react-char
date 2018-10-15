@@ -1,11 +1,11 @@
 import Body from './Layout/Body';
 import Drawer from './Layout/Drawer';
-import Menu from './Layout/Menu';
+import MenuContainer from './Layout/MenuContainer';
 
 const Layout = {
   Body: Body,
   Drawer: Drawer,
-  Menu: Menu,
+  Menu: MenuContainer,
 };
 
 export default Layout;
