@@ -17,18 +17,18 @@ class App extends React.Component {
   render = () => {
     return (
       <SnackbarProvider maxSnack={5}>
-        <Router>
-          <React.Fragment>
-            <CssBaseline />
-            <MuiThemeProvider theme={DefaultTheme}>
+        <CssBaseline />
+        <MuiThemeProvider theme={DefaultTheme}>
+          <Router>
+            <React.Fragment>
               <Switch>
                 <Route exact path='/' component={Welcome} />
                 <Route path='/chat' component={Chat} />
                 <Redirect to='/' />
               </Switch>
-            </MuiThemeProvider>
-          </React.Fragment>
-        </Router>
+            </React.Fragment>
+          </Router>
+        </MuiThemeProvider>
       </SnackbarProvider>
     );
   };

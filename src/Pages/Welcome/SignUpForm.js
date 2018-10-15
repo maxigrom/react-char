@@ -9,6 +9,7 @@ import type { TValueWithError } from '../../Models/ValueWithError';
 import { newValueWithError } from '../../Models/ValueWithError';
 import { withSnackbar } from 'notistack';
 import type { FEnqueueSnackbar } from '../../Types/Libs/notistack/TEnqueueSnackbarFunction';
+import { Redirect } from 'react-router-dom';
 
 type Props = {
   classes: Object,
@@ -19,6 +20,7 @@ type State = {
   userName: TValueWithError<string>,
   password: TValueWithError<string>,
   passwordRepeat: TValueWithError<string>,
+  redirectOnSuccessSignUp: boolean,
 };
 
 const styles = theme => ({
@@ -46,7 +48,8 @@ class SignUpForm extends React.Component<Props, State> {
   state: State = {
     userName: newValueWithError(''),
     password: newValueWithError(''),
-    passwordRepeat: newValueWithError(('')),
+    passwordRepeat: newValueWithError(''),
+    redirectOnSuccessLogin: false,
   };
 
   handleOnChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -54,7 +57,7 @@ class SignUpForm extends React.Component<Props, State> {
 
     this.setState({
       [e.currentTarget.name]: {
-        value: e.currentTarget.value
+        value: e.currentTarget.value,
       },
     });
   };
@@ -79,13 +82,13 @@ class SignUpForm extends React.Component<Props, State> {
         const newState = { ...prevState };
         if (prevState.userName.value.length === 0) {
           isValid = false;
-          newState.userName.error = "Please enter a user name";
+          newState.userName.error = 'Please enter a user name';
         }
 
         if (prevState.password.value !== prevState.passwordRepeat.value) {
           isValid = false;
-          newState.password.error = "Passwords aren't equal";
-          newState.passwordRepeat.error = "Passwords aren't equal";
+          newState.password.error = 'Passwords aren\'t equal';
+          newState.passwordRepeat.error = 'Passwords aren\'t equal';
         } else {
           newState.password.error = null;
           newState.passwordRepeat.error = null;
@@ -93,12 +96,12 @@ class SignUpForm extends React.Component<Props, State> {
 
         if (prevState.password.value.length === 0) {
           isValid = false;
-          newState.password.error = "Please enter a password";
+          newState.password.error = 'Please enter a password';
         }
 
         if (prevState.passwordRepeat.value.length === 0) {
           isValid = false;
-          newState.passwordRepeat.error = "Please enter a password";
+          newState.passwordRepeat.error = 'Please enter a password';
         }
 
         return newState;
@@ -111,15 +114,23 @@ class SignUpForm extends React.Component<Props, State> {
     const json = await response.json();
     console.log(json);
 
-    this.props.enqueueSnackbar(json.message, {variant: json.success ? 'success' : 'error'} );
+    this.props.enqueueSnackbar(json.message, { variant: json.success ? 'success' : 'error' });
+
+    if (json.success) {
+      this.setState({
+        redirectOnSuccessSignUp: true,
+      });
+    }
   };
 
   render = () => {
     const { classes } = this.props;
-    const { userName, password, passwordRepeat } = this.state;
+    const { userName, password, passwordRepeat, redirectOnSuccessSignUp } = this.state;
+
+    if (redirectOnSuccessSignUp) return (<Redirect to='/chat' push />);
 
     return (
-      <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete="off">
+      <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete='off'>
         <TextField
           name='userName'
           label='User Name'

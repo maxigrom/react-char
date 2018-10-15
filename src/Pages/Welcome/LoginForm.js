@@ -9,6 +9,7 @@ import type { TValueWithError } from '../../Models/ValueWithError';
 import { newValueWithError } from '../../Models/ValueWithError';
 import { withSnackbar } from 'notistack';
 import type { FEnqueueSnackbar } from '../../Types/Libs/notistack/TEnqueueSnackbarFunction';
+import { Redirect } from 'react-router-dom';
 
 type Props = {
   classes: Object,
@@ -18,6 +19,7 @@ type Props = {
 type State = {
   userName: TValueWithError<string>,
   password: TValueWithError<string>,
+  redirectOnSuccessLogin: boolean
 };
 
 const styles = theme => ({
@@ -41,6 +43,7 @@ class LoginForm extends React.Component<Props, State> {
   state: State = {
     userName: newValueWithError(''),
     password: newValueWithError(''),
+    redirectOnSuccessLogin: false,
   };
 
   handleOnChange = (e: SyntheticEvent<HTMLInputElement>) => {
@@ -91,11 +94,19 @@ class LoginForm extends React.Component<Props, State> {
     console.log(json);
 
     this.props.enqueueSnackbar(json.message, {variant: json.success ? 'success' : 'error'} );
+
+    if (json.success) {
+      this.setState({
+        redirectOnSuccessLogin: true,
+      });
+    }
   };
 
   render = () => {
     const { classes } = this.props;
-    const { userName, password } = this.state;
+    const { userName, password, redirectOnSuccessLogin } = this.state;
+
+    if(redirectOnSuccessLogin) return (<Redirect to='/chat' push />);
 
     return (
       <form className={classes.container} onSubmit={this.handleOnLogin} autoComplete='off'>
