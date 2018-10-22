@@ -4,8 +4,8 @@ import { withSnackbar } from 'notistack';
 import type { FEnqueueSnackbar } from '../Types/Libs/notistack/TEnqueueSnackbarFunction';
 import Store from '../Redux/Store';
 import type { TNotification } from '../Types/TNotification';
-import NotificationActions from '../Redux/Notification/NotificationActions';
 import type { TNotificationsState } from '../Redux/Notification/NotificationReducer';
+import { pop } from '../Redux/Notification/NotificationActions';
 
 type Props = {
   enqueueSnackbar: FEnqueueSnackbar,
@@ -42,7 +42,7 @@ class Notifications extends React.Component<Props, State> {
 
     const notification = storeNotifications[0];
     this.props.enqueueSnackbar(notification.message, { variant: notification.type });
-    Store.dispatch(NotificationActions.pop());
+    Store.dispatch(pop());
   };
 
   render = () => null;

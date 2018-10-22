@@ -1,21 +1,12 @@
-const AuthActionTypes = {
-  SIGNUP: {
-    REQUEST: Symbol('auth/SIGNUP_REQUEST'),
-    SUCCESS: Symbol('auth/SIGNUP_SUCCESS'),
-    FAILURE: Symbol('auth/SIGNUP_FAILURE'),
-  },
+//@flow
+import type { TRequestActionType } from '../../Types/Redux/TRequestActionType';
 
-  LOGIN: {
-    REQUEST: Symbol('auth/LOGIN_REQUEST'),
-    SUCCESS: Symbol('auth/LOGIN_SUCCESS'),
-    FAILURE: Symbol('auth/LOGIN_FAILURE'),
-  },
+const createAction = (name: string): TRequestActionType => ({
+  REQUEST: Symbol(`${name}_REQUEST`),
+  SUCCESS: Symbol(`${name}_SUCCESS`),
+  FAILURE: Symbol(`${name}_FAILURE`),
+});
 
-  LOGOUT: {
-    REQUEST: Symbol('auth/LOGOUT_REQUEST'),
-    SUCCESS: Symbol('auth/LOGOUT_SUCCESS'),
-    FAILURE: Symbol('auth/LOGOUT_FAILURE'),
-  },
-};
-
-export default AuthActionTypes;
+export const SIGNUP = createAction('auth/SIGNUP');
+export const LOGIN = createAction('auth/LOGIN');
+export const LOGOUT = createAction('auth/LOGOUT');

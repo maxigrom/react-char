@@ -1,7 +1,7 @@
 // @flow
 import type { TApiUser } from '../../Types/Api/TApiUser';
-import AuthActionTypes from './AuthActionTypes';
 import LocalStorageHelper from '../../Helpers/LocalStorageHelper';
+import { LOGIN, LOGOUT, SIGNUP } from './AuthActionTypes';
 
 export type TAuthState = {|
   user: ?TApiUser,
@@ -18,14 +18,14 @@ const initialState: TAuthState = {
 };
 
 const AuthReducer = (state: TAuthState = initialState, action): TAuthState => {
-  switch(action.type) {
-    case AuthActionTypes.LOGIN.REQUEST:
-    case AuthActionTypes.LOGOUT.REQUEST:
-    case AuthActionTypes.SIGNUP.REQUEST:
+  switch (action.type) {
+    case LOGIN.REQUEST:
+    case LOGOUT.REQUEST:
+    case SIGNUP.REQUEST:
       return state;
 
-    case AuthActionTypes.LOGIN.SUCCESS:
-    case AuthActionTypes.SIGNUP.SUCCESS:
+    case LOGIN.SUCCESS:
+    case SIGNUP.SUCCESS:
       return {
         ...state,
         user: action.payload.user,
@@ -33,10 +33,10 @@ const AuthReducer = (state: TAuthState = initialState, action): TAuthState => {
         isAuthenticated: true,
       };
 
-    case AuthActionTypes.LOGOUT.SUCCESS:
-    case AuthActionTypes.LOGIN.FAILURE:
-    case AuthActionTypes.LOGOUT.FAILURE:
-    case AuthActionTypes.SIGNUP.FAILURE:
+    case LOGOUT.SUCCESS:
+    case LOGIN.FAILURE:
+    case LOGOUT.FAILURE:
+    case SIGNUP.FAILURE:
       return {
         ...state,
         user: null,

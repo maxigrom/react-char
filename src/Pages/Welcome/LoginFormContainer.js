@@ -1,18 +1,18 @@
 // @flow
 import type { TLoginUser } from '../../Types/TLoginUser';
-import AuthActions from '../../Redux/Auth/AuthActions';
 import LoginForm from './LoginForm';
 import { connect } from 'react-redux';
-import type { TStoreState } from '../../Redux/Store';
+import type { TStore } from '../../Redux/RootReducer';
+import { login } from '../../Redux/Auth/AuthActions';
 
-const mapStateToProps = (state: TStoreState) => {
+const mapStateToProps = (state: TStore) => {
   return {
-    redirectToChat: state.auth.isAuthenticated
+    redirectToChat: state.auth.isAuthenticated,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onLogin: (user: TLoginUser) => dispatch(AuthActions.login(user))
+  onLogin: (user: TLoginUser) => dispatch(login(user)),
 });
 
 export default connect(

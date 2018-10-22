@@ -1,5 +1,4 @@
 // @flow
-
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -18,14 +17,6 @@ import PrivateRoute from './Components/Route/PrivateRoute';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-
-const logState = () => {
-  const state = Store.getState();
-  console.log('-----------------------');
-  console.dir(state);
-};
-
-Store.subscribe(logState);
 
 class App extends React.Component {
   render = () => {

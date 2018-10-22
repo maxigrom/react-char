@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import type { TStoreState } from '../../Redux/Store';
 import { connect } from 'react-redux';
+import type { TStore } from '../../Redux/RootReducer';
 
 type Props = {
   component: React.ComponentClass,
@@ -11,7 +11,7 @@ type Props = {
 
 class PrivateRoute extends React.Component<Props> {
   props: Props;
-
+  
   renderRoute = (routeProps: Object) => {
     if (!this.props.isAuthenticated) {
       return (
@@ -32,7 +32,7 @@ class PrivateRoute extends React.Component<Props> {
   };
 }
 
-const mapStateToProps = (state: TStoreState) => ({
+const mapStateToProps = (state: TStore) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 

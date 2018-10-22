@@ -1,17 +1,17 @@
 // @flow
 import type { TNotification } from '../../Types/TNotification';
-import NotificationActionTypes from './NotificationActionTypes';
+import { POP, PUSH } from './NotificationActionTypes';
 
 export type TNotificationsState = TNotification[];
 
 const initialState: TNotificationsState = [];
 
 const NotificationReducer = (state: TNotificationsState = initialState, action): TNotificationsState => {
-  switch(action.type) {
-    case NotificationActionTypes.NOTIFICATION_PUSH:
+  switch (action.type) {
+    case PUSH:
       return [...state, action.notification];
 
-    case NotificationActionTypes.NOTIFICATION_POP:
+    case POP:
       return state.slice(1);
 
     default:
