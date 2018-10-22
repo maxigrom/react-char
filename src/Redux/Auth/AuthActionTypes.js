@@ -10,3 +10,4 @@ const createAction = (name: string): TRequestActionType => ({
 export const SIGNUP = createAction('auth/SIGNUP');
 export const LOGIN = createAction('auth/LOGIN');
 export const LOGOUT = createAction('auth/LOGOUT');
+export const RECEIVE_AUTH = createAction('auth/RECEIVE_AUTH');

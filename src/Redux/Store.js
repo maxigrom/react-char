@@ -3,8 +3,13 @@ import thunkMiddleware from 'redux-thunk';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 import { RootReducer } from './RootReducer';
+import history from '../Helpers/HistoryHelper';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 
-const DEFAULT_MIDDLEWARES = [thunkMiddleware];
+const DEFAULT_MIDDLEWARES = [
+  thunkMiddleware,
+  routerMiddleware(history)
+];
 
 function getMiddlewares() {
   if (process.env.NODE_ENV === 'production') return DEFAULT_MIDDLEWARES;
@@ -18,8 +23,10 @@ const composeEnhancers =
     serialize: true,
   }) : compose;
 
+const rootReducerWithHistory = connectRouter(history)(RootReducer);
+
 const store = createStore(
-  RootReducer, {},
+  rootReducerWithHistory, {},
   composeEnhancers(
     applyMiddleware(
       ...getMiddlewares()
@@ -29,7 +36,7 @@ const store = createStore(
 
 if (module.hot) {
   module.hot.accept('./RootReducer', () => {
-    store.replaceReducer(RootReducer);
+    store.replaceReducer(rootReducerWithHistory);
   });
 }
 

@@ -2,14 +2,25 @@
 import urljoin from 'url-join';
 import type { Response } from '@types/node-fetch';
 
-export const getParams = (method: string, data?: mixed): Object => ({
-  method: method,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-});
+const DEFAULT_HEADERS = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+};
+
+export const getParams = (method: string, token: ?string, data?: mixed): Object => {
+  const headers = token == null ? DEFAULT_HEADERS : {
+    ...DEFAULT_HEADERS,
+    'Authorization': `Bearer ${token}`
+  };
+
+  console.log({ headers });
+
+  return {
+    method: method,
+    headers: headers,
+    body: JSON.stringify(data),
+  };
+};
 
 
 const DEFAULT_URL = 'http://localhost:8000/v1/';
@@ -30,19 +41,35 @@ class BasicApi {
   getUrl = (url: string): string => urljoin(this.apiUrl, url);
 
   get = async (url: string): Promise<Response> => (
-    fetch(this.getUrl(url), getParams('GET')).then(getJson)
+    fetch(this.getUrl(url), getParams('GET', null)).then(getJson)
   );
 
   post = async (url: string, data: ?Object): Promise<Response> => (
-    fetch(this.getUrl(url), getParams('POST', data)).then(getJson)
+    fetch(this.getUrl(url), getParams('POST', null, data)).then(getJson)
   );
 
   put = async (url: string, data: ?Object): Promise<Response> => (
-    fetch(this.getUrl(url), getParams('PUT', data)).then(getJson)
+    fetch(this.getUrl(url), getParams('PUT', null, data)).then(getJson)
   );
 
   delete = async (url: string, data: ?Object): Promise<Response> => (
-    fetch(this.getUrl(url), getParams('DELETE', data)).then(getJson)
+    fetch(this.getUrl(url), getParams('DELETE', null, data)).then(getJson)
+  );
+
+  getWithToken = async (url: string, token: string): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('GET', token)).then(getJson)
+  );
+
+  postWithToken = async (url: string, token: string, data: ?Object): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('POST', token, data)).then(getJson)
+  );
+
+  putWithToken = async (url: string, token: string, data: ?Object): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('PUT', token, data)).then(getJson)
+  );
+
+  deleteWithToken = async (url: string, token: string, data: ?Object): Promise<Response> => (
+    fetch(this.getUrl(url), getParams('DELETE', token, data)).then(getJson)
   );
 }
 
