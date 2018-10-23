@@ -51,7 +51,7 @@ const Menu = (props: Props) => {
           <Meow />
         </IconButton>
         <Typography variant='title' color='inherit' className={classes.grow}>
-          React Chat
+          Welcome to React Chat
         </Typography>
         {showLogoutButton && (
           <Button color='inherit' onClick={onClickLogout}>Logout</Button>

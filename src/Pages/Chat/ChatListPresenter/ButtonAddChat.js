@@ -8,11 +8,13 @@ const styles = theme => ({
   buttonAdd: {
     position: 'absolute',
     bottom: theme.mixins.toolbar.minHeight + theme.spacing.sm,
-    right:theme.spacing.md,
+    right: theme.spacing.md,
   },
 });
 
-type Props = {};
+type Props = {
+  onClick: () => void
+};
 
 class ButtonAddChat extends React.Component<Props> {
   props: Props;
@@ -21,7 +23,7 @@ class ButtonAddChat extends React.Component<Props> {
     const { classes } = this.props;
 
     return (
-      <Button variant='fab' color='primary' aria-label='Add' className={classes.buttonAdd}>
+      <Button variant='fab' color='primary' aria-label='Add' className={classes.buttonAdd} onClick={this.props.onClick}>
         <AddIcon />
       </Button>
     );

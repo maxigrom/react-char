@@ -10,18 +10,20 @@ const DEFAULT_HEADERS = {
 export const getParams = (method: string, token: ?string, data?: mixed): Object => {
   const headers = token == null ? DEFAULT_HEADERS : {
     ...DEFAULT_HEADERS,
-    'Authorization': `Bearer ${token}`
+    'Authorization': `Bearer ${token}`,
   };
 
-  console.log({ headers });
-
-  return {
+  const params = {
     method: method,
     headers: headers,
-    body: JSON.stringify(data),
   };
-};
 
+  if (data != null) {
+    params.body = JSON.stringify(data);
+  }
+
+  return params;
+};
 
 const DEFAULT_URL = 'http://localhost:8000/v1/';
 

@@ -1,7 +1,5 @@
 // @flow
-import BasicApi, { getJsonWithResponse } from './Basic/BasicApi';
-import type { TLoginUser } from '../Types/TLoginUser';
-import type { TApiSignUpResponse, TSignUpJson } from '../Types/Api/Jsons/TSignUpJson';
+import BasicApi from './Basic/BasicApi';
 
 const API = new BasicApi();
 

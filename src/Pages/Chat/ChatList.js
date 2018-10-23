@@ -4,14 +4,15 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import Divider from '@material-ui/core/Divider';
-import { ChatListData } from '../../Data/ChatList.data';
-import type { TChat } from '../../Data/ChatList.data';
-import ChatListItem from './ChatList/ChatListItem';
+import ChatListItem from './ChatListPresenter/ChatListItem';
 import List from '@material-ui/core/List';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import ButtonAddChat from './ChatList/ButtonAddChat';
-import ChatNavigation from './ChatList/ChatNavigation';
+import ButtonAddChat from './ChatListPresenter/ButtonAddChat';
+import ChatNavigation from './ChatListPresenter/ChatNavigation';
+import type { TApiChat } from '../../Types/Api/TApiChat';
+import ModalAddNewChat from './ChatListPresenter/ModalAddNewChat';
+
+const ALL_CHATS = 'ALL_CHATS';
+const MY_CHATS = 'MY_CHATS';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -28,17 +29,67 @@ const styles = theme => ({
 });
 
 type Props = {
-  chats: TChat[]
+  activeChat: ?TApiChat,
+  myChats: TApiChat[],
+  allChats: TApiChat[],
+
+  fetchAllChats: () => void,
+  fetchMyChats: () => void,
+  setActiveChat: (chatId: string) => void,
+  createChat: (title: string) => void,
 };
 
-class ChatList extends React.Component<Props> {
+type State = {
+  isOpenModal: boolean,
+  chatListType: ALL_CHATS | MY_CHATS;
+};
+
+class ChatList extends React.Component<Props, State> {
   props: Props;
 
+  state = {
+    isOpenModal: false,
+    chatListType: MY_CHATS,
+  };
+
+  componentDidMount = () => {
+    const { fetchAllChats, fetchMyChats } = this.props;
+    Promise.all([fetchAllChats(), fetchMyChats()]);
+  };
+
+  handleOnClickOpenModal = () => {
+    this.setState({
+      isOpenModal: true,
+    });
+  };
+
+  handleOnCloseModal = () => {
+    this.setState({
+      isOpenModal: false,
+    });
+  };
+
+  handleOnCreateChat = (title: string) => {
+    this.props.createChat(title);
+    this.setState({
+      isOpenModal: false,
+    });
+  };
+
+  handleOnClickChatListType = (chatListType: string) => {
+    this.setState({
+      chatListType: chatListType,
+    });
+  };
+
   render = () => {
-    const { chats, classes } = this.props;
+    const { isOpenModal, chatListType } = this.state;
+    const { allChats, myChats, activeChat, classes } = this.props;
+    const displayChatList = chatListType === ALL_CHATS ? allChats : myChats;
 
     return (
       <>
+      <ModalAddNewChat isOpen={isOpenModal} onClose={this.handleOnCloseModal} onCreate={this.handleOnCreateChat} />
       <div className={classes.toolbar}>
         <div className={classes.searchChats}>
           <Input
@@ -49,11 +100,18 @@ class ChatList extends React.Component<Props> {
       </div>
       <Divider />
       <List className={classes.chatList}>
-        {chats.map(chat => <ChatListItem key={chat.id} chat={chat} />)}
+        {displayChatList.map(chat =>
+          <ChatListItem
+            key={chat._id}
+            chat={chat}
+            onClick={this.props.setActiveChat}
+            isActive={!!activeChat && chat._id === activeChat._id}
+          />,
+        )}
       </List>
       <Divider />
-      <ButtonAddChat />
-      <ChatNavigation />
+      <ButtonAddChat onClick={this.handleOnClickOpenModal} />
+      <ChatNavigation currentChatListType={chatListType} onClick={this.handleOnClickChatListType} />
       </>
     );
   };

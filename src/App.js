@@ -6,7 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import DefaultTheme from './Components/DefaultTheme';
 import { Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import Chat from './Pages/Chat';
 import Welcome from './Pages/Welcome';
 import Redirect from 'react-router-dom/es/Redirect';
 import { SnackbarProvider } from 'notistack';
@@ -15,7 +14,8 @@ import Notifications from './Components/Notifications';
 import PrivateRoute from './Components/Route/PrivateRoute';
 import { receiveAuth } from './Redux/Auth/AuthActions';
 import history from './Helpers/HistoryHelper';
-import { ConnectedRouter } from 'connected-react-router'
+import { ConnectedRouter } from 'connected-react-router';
+import ChatContainer from './Pages/ChatContainer';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -36,7 +36,7 @@ class App extends React.Component {
               <React.Fragment>
                 <Switch>
                   <Route exact path='/' component={Welcome} />
-                  <PrivateRoute path='/chat' component={Chat} />
+                  <PrivateRoute path='/chat' component={ChatContainer} />
                   <Redirect to='/' />
                 </Switch>
                 <Notifications />

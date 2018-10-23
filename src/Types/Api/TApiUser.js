@@ -1,10 +1,9 @@
 // @flow
-export type TApiUser = {
-  _id: '',
-  createdAt: '',
-  username: '',
-  lastName: '',
-  firstName: '',
+import type { TApiUserInfo } from './TApiUserInfo';
+
+export type TApiUser = TApiUserInfo & {
+  createdAt: string,
   chats: mixed[],
-  messagesCount: number
+  messagesCount: number,
 };
+

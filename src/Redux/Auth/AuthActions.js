@@ -5,31 +5,15 @@ import type { TSignUpJson } from '../../Types/Api/Jsons/TSignUpJson';
 import AuthApi from '../../Api/AuthApi';
 import LocalStorageHelper from '../../Helpers/LocalStorageHelper';
 import * as NotificationActions from '../Notification/NotificationActions';
-import { LOGIN, LOGOUT, SIGNUP, RECEIVE_AUTH } from './AuthActionTypes';
+import { LOGIN, LOGOUT, SIGN_UP, RECEIVE_AUTH } from './AuthActionTypes';
 import UsersApi from '../../Api/UsersApi';
 import type { TUserJson } from '../../Types/Api/Jsons/TUserJson';
+import type { FGetState } from '../../Types/Redux/FGetState';
+import { push_success } from '../Notification/NotificationActions';
+import { dispatchErrors } from '../../Helpers/ReduxHelper';
 
-type FGetState = () => TStore;
-
-const getSuccessNotification = message => NotificationActions.push({ message: message, type: 'success' });
-const getFailureNotification = message => NotificationActions.push({ message: message, type: 'error' });
-
-const dispatchErrors = (dispatch, actionType, reason) => {
-  if (typeof reason === 'object') {
-    console.error(reason);
-    reason = reason.toString();
-  }
-
-  dispatch(getFailureNotification(reason));
-
-  dispatch({
-    type: actionType.FAILURE,
-    reason: reason,
-  });
-};
-
-export const signUp = (user: TLoginUser) => (dispatch, getState: FGetState) => {
-  const actionType = SIGNUP;
+export const signUp = (user: TLoginUser) => (dispatch) => {
+  const actionType = SIGN_UP;
 
   dispatch({ type: actionType.REQUEST });
 
@@ -38,7 +22,7 @@ export const signUp = (user: TLoginUser) => (dispatch, getState: FGetState) => {
 
     LocalStorageHelper.setAuthToken(json.token);
 
-    dispatch(getSuccessNotification(json.message));
+    dispatch(push_success(json.message));
 
     dispatch({
       type: actionType.SUCCESS,
@@ -49,7 +33,7 @@ export const signUp = (user: TLoginUser) => (dispatch, getState: FGetState) => {
   });
 };
 
-export const login = (user: TLoginUser) => (dispatch, getState: FGetState) => {
+export const login = (user: TLoginUser) => (dispatch) => {
   const actionType = LOGIN;
 
   dispatch({ type: actionType.REQUEST });
@@ -59,7 +43,7 @@ export const login = (user: TLoginUser) => (dispatch, getState: FGetState) => {
 
     LocalStorageHelper.setAuthToken(json.token);
 
-    dispatch(getSuccessNotification(json.message));
+    dispatch(push_success(json.message));
 
     dispatch({
       type: actionType.SUCCESS,
@@ -70,7 +54,7 @@ export const login = (user: TLoginUser) => (dispatch, getState: FGetState) => {
   });
 };
 
-export const logout = () => (dispatch, getState: FGetState) => {
+export const logout = () => (dispatch) => {
   const actionType = LOGOUT;
 
   dispatch({ type: actionType.REQUEST });
@@ -78,7 +62,7 @@ export const logout = () => (dispatch, getState: FGetState) => {
   return AuthApi.logout().then((json: TSignUpJson) => {
     LocalStorageHelper.removeAuthKey();
 
-    dispatch(getSuccessNotification(json.message));
+    dispatch(push_success(json.message));
 
     dispatch({
       type: actionType.SUCCESS,

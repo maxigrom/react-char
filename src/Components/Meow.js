@@ -8,7 +8,7 @@ type Props = {
 }
 
 const Meow = (props: Props) => (
-  <Avatar alt="Meow!" className={props.className} src="./assets/favicon.jpg"/>
+  <Avatar alt='Meow!' className={props.className} src='/assets/favicon.jpg' />
 );
 
 export default Meow;

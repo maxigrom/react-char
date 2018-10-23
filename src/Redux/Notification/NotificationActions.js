@@ -10,3 +10,13 @@ export const push = (notification: TNotification) => ({
 export const pop = () => ({
   type: POP,
 });
+
+export const push_success = message => push({
+  message: message,
+  type: 'success',
+});
+
+export const push_failure = message => push({
+  message: message,
+  type: 'error',
+});
