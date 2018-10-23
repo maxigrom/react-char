@@ -73,8 +73,6 @@ class Menu extends React.Component<Props> {
 
     if (activeChat == null || user == null) return <MenuContainer showDrawer />;
 
-    console.log(`=========================== ${isChatMember}`);
-
     return (
       <AppBar position='absolute' className={appBarClass}>
         <Toolbar>
