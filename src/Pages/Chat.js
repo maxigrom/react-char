@@ -61,7 +61,7 @@ class Chat extends React.Component<Props> {
     );
   };
 
-  render = () => {
+  render() {
     const {
       classes,
       user,

@@ -45,7 +45,9 @@ class Notifications extends React.Component<Props, State> {
     Store.dispatch(pop());
   };
 
-  render = () => null;
+  render() {
+    return null;
+  };
 }
 
 export default withSnackbar(Notifications);

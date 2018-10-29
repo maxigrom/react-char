@@ -85,7 +85,7 @@ class LoginForm extends React.Component<Props, State> {
     });
   };
 
-  render = () => {
+  render() {
     const { classes, redirectToChat } = this.props;
     const { userName, password } = this.state;
 

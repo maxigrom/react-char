@@ -31,7 +31,7 @@ const mapDispatchToProps = dispatch => ({
   leaveChat: (chatId) => dispatch(chatActions.leaveChat(chatId)),
   deleteChat: (chatId) => dispatch(chatActions.deleteChat(chatId)),
   sendMessage: (chatId, messageText) => dispatch(chatActions.sendMessage(chatId, messageText)),
-  logout: () => dispatch(chatActions.logout()),
+  logout: () => dispatch(logout()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

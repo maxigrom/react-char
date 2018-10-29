@@ -56,7 +56,7 @@ class Menu extends React.Component<Props> {
     this.props.deleteChat(this.props.activeChat._id);
   };
 
-  render = () => {
+  render() {
     const {
       user,
       activeChat,

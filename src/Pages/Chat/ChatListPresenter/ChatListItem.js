@@ -19,7 +19,7 @@ class ChatListItem extends React.Component<Props> {
     this.props.onClick(this.props.chat._id);
   };
 
-  render = () => {
+  render() {
     const { chat, isActive } = this.props;
 
     return (

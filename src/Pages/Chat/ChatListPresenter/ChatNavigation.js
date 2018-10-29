@@ -29,7 +29,7 @@ class ChatNavigation extends React.Component<Props> {
     this.props.onClick('ALL_CHATS');
   };
 
-  render = () => {
+  render() {
     const { classes, currentChatListType } = this.props;
 
     return (

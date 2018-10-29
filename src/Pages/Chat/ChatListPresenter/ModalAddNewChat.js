@@ -69,7 +69,7 @@ class ModalAddNewChat extends React.Component<Props, State> {
     this.props.onClose();
   };
 
-  render = () => {
+  render() {
     const { title } = this.state;
     const { isOpen, classes } = this.props;
 

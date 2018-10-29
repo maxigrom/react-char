@@ -52,7 +52,7 @@ class NewMessage extends React.Component<Props, State> {
     this.setCurrentMessage('');
   };
 
-  render = () => {
+  render() {
     const { activeChat, classes } = this.props;
     const { inputValues } = this.state;
 

@@ -17,7 +17,7 @@ type Props = {
 class ChatMessage extends React.Component<Props> {
   props: Props;
 
-  render = () => {
+  render() {
     const { chatMessage, classes } = this.props;
 
     const userName = chatMessage.sender.username;

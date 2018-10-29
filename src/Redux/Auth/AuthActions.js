@@ -1,15 +1,13 @@
 // @flow
-import type { TStore } from '../RootReducer';
 import type { TLoginUser } from '../../Types/TLoginUser';
 import type { TSignUpJson } from '../../Types/Api/Jsons/TSignUpJson';
 import AuthApi from '../../Api/AuthApi';
 import LocalStorageHelper from '../../Helpers/LocalStorageHelper';
-import * as NotificationActions from '../Notification/NotificationActions';
-import { LOGIN, LOGOUT, SIGN_UP, RECEIVE_AUTH } from './AuthActionTypes';
+import { push_success } from '../Notification/NotificationActions';
+import { LOGIN, LOGOUT, RECEIVE_AUTH, SIGN_UP } from './AuthActionTypes';
 import UsersApi from '../../Api/UsersApi';
 import type { TUserJson } from '../../Types/Api/Jsons/TUserJson';
 import type { FGetState } from '../../Types/Redux/FGetState';
-import { push_success } from '../Notification/NotificationActions';
 import { dispatchErrors } from '../../Helpers/ReduxHelper';
 
 export const signUp = (user: TLoginUser) => (dispatch) => {
@@ -77,7 +75,7 @@ export const receiveAuth = () => (dispatch, getState: FGetState) => {
   const actionType = RECEIVE_AUTH;
 
   const { token } = getState().auth;
-  if(token == null) return dispatch({ type: actionType.FAILURE });
+  if (token == null) return Promise.resolve(dispatch({ type: actionType.FAILURE }));
 
   dispatch({ type: actionType.REQUEST });
   return UsersApi.getCurrentUser(token).then((json: TUserJson) => {

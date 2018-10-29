@@ -1,3 +1,4 @@
+// @flow
 import type { TRequestActionType } from '../Types/Redux/TRequestActionType';
 
 const createRequestAction = (name: string): TRequestActionType => {

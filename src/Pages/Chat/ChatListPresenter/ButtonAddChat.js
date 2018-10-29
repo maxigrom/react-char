@@ -19,7 +19,7 @@ type Props = {
 class ButtonAddChat extends React.Component<Props> {
   props: Props;
 
-  render = () => {
+  render() {
     const { classes } = this.props;
 
     return (

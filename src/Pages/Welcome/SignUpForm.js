@@ -106,7 +106,7 @@ class SignUpForm extends React.Component<Props, State> {
     });
   };
 
-  render = () => {
+  render() {
     const { classes, redirectToChat } = this.props;
     const { userName, password, passwordRepeat } = this.state;
 

@@ -82,7 +82,7 @@ class ChatList extends React.Component<Props, State> {
     });
   };
 
-  render = () => {
+  render() {
     const { isOpenModal, chatListType } = this.state;
     const { allChats, myChats, activeChat, classes } = this.props;
     const displayChatList = chatListType === ALL_CHATS ? allChats : myChats;
