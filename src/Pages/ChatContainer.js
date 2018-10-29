@@ -1,6 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 import * as chatActions from '../Redux/Chat/ChatActions';
+import * as socketActions from '../Redux/Sockets/SocketsActions';
 import * as chatReducer from '../Redux/Chat/ChatReducer';
 import type { TStore } from '../Redux/RootReducer';
 import { isChatMember, isCreator, isMember } from '../Redux/RootReducer';
@@ -10,6 +11,7 @@ const mapStateToProps = (state: TStore) => {
   return {
     user: state.auth.user,
     messages: state.messages,
+    router: state.router,
 
     activeChat: chatReducer.getById(state.chats, state.chats.activeId),
     myChats: chatReducer.getByIds(state.chats, state.chats.myIds),
@@ -30,7 +32,11 @@ const mapDispatchToProps = dispatch => ({
   joinChat: (chatId) => dispatch(chatActions.joinChat(chatId)),
   leaveChat: (chatId) => dispatch(chatActions.leaveChat(chatId)),
   deleteChat: (chatId) => dispatch(chatActions.deleteChat(chatId)),
-  sendMessage: (chatId, messageText) => dispatch(chatActions.sendMessage(chatId, messageText)),
+
+  socketsConnect: () => dispatch(socketActions.socketsConnect()),
+  mountChat: (chatId) => dispatch(socketActions.mountChat(chatId)),
+  unmountChat: (chatId) => dispatch(socketActions.unmountChat(chatId)),
+  sendMessage: (chatId, messageText) => dispatch(socketActions.sendMessage(chatId, messageText)),
   logout: () => dispatch(logout()),
 });
 

@@ -76,15 +76,6 @@ export const deleteChat = (chatId: string) => (dispatch, getState: FGetState) =>
   })
 );
 
-export const sendMessage = (chatId: string, messageText: string) => (dispatch, getState: FGetState) => (
-  sendRequest(
-    types.SEND_MESSAGE,
-    (token) => ChatsApi.sendMessage(token, chatId, messageText),
-  )(dispatch, getState).then(() => {
-    dispatch(fetchChat(chatId));
-  })
-);
-
 export const setActiveChat = (chatId: string) => dispatch => {
   return dispatch(fetchChat(chatId)).then((data) => {
     if (!data) {

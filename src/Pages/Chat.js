@@ -6,6 +6,7 @@ import Layout from '../Components/Layout';
 import ChatList from './Chat/ChatList';
 import type { TApiUser } from '../Types/Api/TApiUser';
 import type { TApiChat } from '../Types/Api/TApiChat';
+import type { RouterState } from 'conn';
 import Menu from './Chat/Menu';
 import type { TApiChatMessage } from '../Types/Api/TApiChatMessage';
 import NewMessage from './Chat/NewMessage';
@@ -19,9 +20,11 @@ type Props = {
   allChats: TApiChat[],
   messages: TApiChatMessage[],
 
-  isMember: (chat: ?TApiChat) => bool,
-  isCreator: (chat: ?TApiChat) => bool,
-  isChatMember: (chat: ?TApiChat) => bool,
+  router: RouterState,
+
+  isMember: (chat: ?TApiChat) => boolean,
+  isCreator: (chat: ?TApiChat) => boolean,
+  isChatMember: (chat: ?TApiChat) => boolean,
 
   fetchAllChats: () => void,
   fetchMyChats: () => void,
@@ -30,7 +33,12 @@ type Props = {
   joinChat: (chatId: string) => void,
   leaveChat: (chatId: string) => void,
   deleteChat: (chatId: string) => void,
+
+  socketsConnect: () => void,
+  mountChat: (chatId) => void,
+  unmountChat: (chatId) => void,
   sendMessage: (chatId: string, messageText: string) => void,
+
   logout: () => void,
 };
 
@@ -40,15 +48,75 @@ const styles = theme => ({
   },
 });
 
+const getChatId = (path: string): ?string => {
+  const params = path.toLowerCase().split('/')
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+
+  if (params.length < 2 || params[1].length === 0) return null;
+  return params[1];
+};
+
+const WRAPPER_ID = 'messagesWrapper';
+
 class Chat extends React.Component<Props> {
   props: Props;
 
+  componentDidMount() {
+    const {
+      fetchAllChats,
+      fetchMyChats,
+      setActiveChat,
+      socketsConnect,
+      mountChat,
+    } = this.props;
+
+    Promise.all([fetchAllChats(), fetchMyChats()]).then(() => {
+      socketsConnect();
+    }).then(() => {
+      const id = getChatId(this.props.router.location.pathname);
+
+      if (id) {
+        setActiveChat(id);
+        mountChat(id);
+      }
+    });
+
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { setActiveChat, unmountChat, mountChat } = this.props;
+
+    const currentId = getChatId(this.props.router.location.pathname);
+    const nextId = getChatId(nextProps.router.location.pathname);
+
+    if (nextId && currentId !== nextId) {
+      setActiveChat(nextId);
+      unmountChat(currentId);
+      mountChat(nextId);
+    }
+  }
+
   handleOnSendMessage = (messageText: string) => {
+    console.log(this.props.activeChat._id);
     this.props.sendMessage(this.props.activeChat._id, messageText);
   };
 
   handleOnClickJoinChat = () => {
     this.props.joinChat(this.props.activeChat._id);
+  };
+
+  scrollToBottom = () => {
+    const messagesWrapper = document.querySelector(`#${WRAPPER_ID}`);
+    if (messagesWrapper) {
+      console.log(messagesWrapper);
+      messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
+    }
   };
 
   getBottomController = () => {
@@ -70,12 +138,9 @@ class Chat extends React.Component<Props> {
       allChats,
       messages,
 
-      isMember,
       isCreator,
       isChatMember,
 
-      fetchAllChats,
-      fetchMyChats,
       createChat,
       setActiveChat,
       logout,
@@ -91,8 +156,6 @@ class Chat extends React.Component<Props> {
           activeChat={activeChat}
           myChats={myChats}
           allChats={allChats}
-          fetchAllChats={fetchAllChats}
-          fetchMyChats={fetchMyChats}
           setActiveChat={setActiveChat}
           createChat={createChat}
         />
@@ -106,7 +169,7 @@ class Chat extends React.Component<Props> {
         deleteChat={deleteChat}
         logout={logout}
       />
-      <Layout.Body showDrawer>
+      <Layout.Body id={WRAPPER_ID} showDrawer>
         <Grid
           container
           spacing={16}
@@ -115,7 +178,7 @@ class Chat extends React.Component<Props> {
           alignItems={'flex-start'}
         >
           {messages.map((chatMessage, i) => (
-            <Grid item xs={12} key={i}>
+            <Grid item xs={12} key={i} style={chatMessage.statusMessage ? { width: '100%' } : null}>
               <ChatMessage
                 chatMessage={chatMessage}
                 isCurrentUser={chatMessage.sender._id === user._id}
@@ -128,6 +191,6 @@ class Chat extends React.Component<Props> {
       </>
     );
   };
-};
+}
 
 export default withStyles(styles)(Chat);

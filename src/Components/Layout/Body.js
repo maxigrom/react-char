@@ -18,15 +18,16 @@ const styles = theme => ({
 });
 
 type Props = {
+  id?: string,
   children: React.Node,
   showDrawer?: boolean,
 }
 
 const Body = (props: Props) => {
-  const { classes, showDrawer, children } = props;
+  const { classes, showDrawer, children, id } = props;
 
   return (
-    <main className={classes.content} style={{ left: showDrawer ? StyleConstants.DrawerWidth : 0 }}>
+    <main id={id} className={classes.content} style={{ left: showDrawer ? StyleConstants.DrawerWidth : 0 }}>
       {children}
     </main>
   );

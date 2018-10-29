@@ -33,8 +33,6 @@ type Props = {
   myChats: TApiChat[],
   allChats: TApiChat[],
 
-  fetchAllChats: () => void,
-  fetchMyChats: () => void,
   setActiveChat: (chatId: string) => void,
   createChat: (title: string) => void,
 };
@@ -50,11 +48,6 @@ class ChatList extends React.Component<Props, State> {
   state = {
     isOpenModal: false,
     chatListType: MY_CHATS,
-  };
-
-  componentDidMount = () => {
-    const { fetchAllChats, fetchMyChats } = this.props;
-    Promise.all([fetchAllChats(), fetchMyChats()]);
   };
 
   handleOnClickOpenModal = () => {

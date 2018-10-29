@@ -22,13 +22,13 @@ class Notifications extends React.Component<Props, State> {
     notifications: [],
   };
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.unsubscribe = Store.subscribe(this.onUpdateStore);
-  };
+  }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.unsubscribe();
-  };
+  }
 
   onUpdateStore = () => {
     const storeNotifications: TNotificationsState = Store.getState().notifications;

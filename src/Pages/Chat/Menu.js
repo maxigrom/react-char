@@ -15,19 +15,16 @@ import withStyles from '@material-ui/core/es/styles/withStyles';
 
 const styles = theme => ({
   appBar: {
-    width: '100%',
+    width: `calc(100% - ${StyleConstants.DrawerWidth}px)`,
     position: 'fixed',
     top: 0,
-    left: 0,
+    left: StyleConstants.DrawerWidth,
     right: 0,
   },
   grow: {
     flexGrow: 1,
   },
-  appBarWithDrawer: {
-    width: `calc(100% - ${StyleConstants.DrawerWidth}px)`,
-    left: StyleConstants.DrawerWidth,
-  },
+  appBarWithDrawer: {},
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
