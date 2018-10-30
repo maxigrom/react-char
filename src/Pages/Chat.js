@@ -151,7 +151,6 @@ class Chat extends React.Component<Props> {
   };
 
   handleOnSendMessage = (messageText: string) => {
-    console.log(this.props.activeChat._id);
     this.props.sendMessage(this.props.activeChat._id, messageText);
   };
 
@@ -162,7 +161,6 @@ class Chat extends React.Component<Props> {
   scrollToBottom = () => {
     const messagesWrapper = document.querySelector(`#${WRAPPER_ID}`);
     if (messagesWrapper) {
-      console.log(messagesWrapper);
       messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
     }
   };

@@ -6,10 +6,7 @@ import { push_failure } from '../Notification/NotificationActions';
 export function sendRequest(actionType: TRequestActionType, getRequestPromise: Promise, isFetchingProp: string) {
   return (dispatch, getState: FGetState): Promise => {
     const isFetching = getState().services.isFetching[isFetchingProp];
-    if (isFetching) {
-      console.warn(`[${isFetchingProp}]: Can't send a new request, because we have an existing ones`);
-      return Promise.resolve();
-    }
+    if (isFetching) return Promise.resolve();
 
     dispatch({ type: actionType.REQUEST });
 
