@@ -1,13 +1,21 @@
 import SocketIOClient from 'socket.io-client';
 import * as types from './SocketsActionTypes';
+import { push_failure } from '../Notification/NotificationActions';
 
 const createSocket = (token, dispatch) => {
   const socket = SocketIOClient('ws://localhost:8000/', {
     query: { token },
   });
 
-  socket.on('error', (errorMessage) => dispatch(errorMessage));
-  socket.on('connect_error', () => dispatch(connectError()));
+  socket.on('error', (errorMessage) => {
+    dispatch(error(errorMessage));
+    dispatch(push_failure(message));
+  });
+  socket.on('connect_error', () => {
+    const message = 'We have lost a connection :(';
+    dispatch(error(message));
+    dispatch(push_failure(message));
+  });
   socket.on('new-message', (message) => dispatch(newMessage(message)));
   socket.on('new-chat', ({ chat }) => dispatch(newChat(chat)));
   socket.on('deleted-chat', ({ chat }) => {
@@ -29,11 +37,6 @@ const connect = () => ({
 const error = (errorMessage) => ({
   type: types.SOCKETS_CONNECTION.FAILURE,
   payload: new Error(`Connection: ${errorMessage}`),
-});
-
-const connectError = () => ({
-  type: types.SOCKETS_CONNECTION.FAILURE,
-  payload: new Error('We have lost a connection :('),
 });
 
 const newMessage = function(message) {

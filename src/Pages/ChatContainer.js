@@ -23,6 +23,7 @@ const mapStateToProps = (state: TStore) => {
     isFetching: isFetching,
     isFetchingChat: isFetching.fetchAllChats || isFetching.fetchMyChats || isFetching.fetchChat,
     isFetchingChatActions: isFetching.joinChat || isFetching.leaveChat || isFetching.deleteChat,
+    isConnected: state.services.isConnected,
 
     isMember: (chat) => isMember(state, chat),
     isCreator: (chat) => isCreator(state, chat),

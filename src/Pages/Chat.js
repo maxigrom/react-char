@@ -25,6 +25,7 @@ type Props = {
   isFetching: TServiceFetchingState,
   isFetchingChat: boolean,
   isFetchingChatActions: boolean,
+  isConnected: boolean,
 
   router: RouterState,
 
@@ -48,6 +49,10 @@ type Props = {
   logout: () => void,
 };
 
+type State = {
+  socketIntervalId: ?number
+};
+
 const styles = theme => ({
   chatContainer: {
     paddingBottom: theme.mixins.toolbar.minHeight + theme.spacing.md,
@@ -67,6 +72,10 @@ const WRAPPER_ID = 'messagesWrapper';
 
 class Chat extends React.Component<Props> {
   props: Props;
+
+  state = {
+    socketIntervalId: 0,
+  };
 
   componentDidMount() {
     const {
@@ -91,15 +100,27 @@ class Chat extends React.Component<Props> {
     this.scrollToBottom();
   }
 
+  componentWillUnmount() {
+    this.stopSocketConnecting();
+  }
+
   componentDidUpdate() {
     this.scrollToBottom();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const { setActiveChat, unmountChat, mountChat } = this.props;
 
     const currentId = getChatId(this.props.router.location.pathname);
     const nextId = getChatId(nextProps.router.location.pathname);
+
+    if (this.props.isConnected && !nextProps.isConnected) {
+      this.runSocketConnecting();
+    }
+
+    if (!this.props.isConnected && nextProps.isConnected) {
+      this.stopSocketConnecting();
+    }
 
     if (nextId && currentId !== nextId) {
       setActiveChat(nextId);
@@ -107,6 +128,27 @@ class Chat extends React.Component<Props> {
       mountChat(nextId);
     }
   }
+
+  runSocketConnecting = () => {
+    this.setState((prevState: State) => {
+      if (prevState.socketIntervalId !== null) clearInterval(prevState.socketIntervalId);
+
+      return {
+        socketIntervalId: setInterval(this.props.socketsConnect, 10000),
+      };
+    });
+  };
+
+  stopSocketConnecting = () => {
+    if (this.state.socketIntervalId === null) return;
+
+    this.setState((prevState: State) => {
+      clearInterval(prevState.socketIntervalId);
+      return {
+        socketIntervalId: null,
+      };
+    });
+  };
 
   handleOnSendMessage = (messageText: string) => {
     console.log(this.props.activeChat._id);
@@ -147,6 +189,7 @@ class Chat extends React.Component<Props> {
 
       isFetching,
       isFetchingChat,
+      isConnected,
 
       isCreator,
       isChatMember,
@@ -161,6 +204,7 @@ class Chat extends React.Component<Props> {
     return (
       <>
       <Loading loading={isFetching.logout} />
+      <Loading loading={!isConnected} message='We have lost a connection :(' />
       <Layout.Drawer loading={isFetchingChat}>
         <ChatList
           activeChat={activeChat}

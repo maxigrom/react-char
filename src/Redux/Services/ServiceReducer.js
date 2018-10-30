@@ -147,9 +147,11 @@ export const isConnected = (state: boolean = intialState.isConnected, action): b
   switch (action.type) {
     case types.SOCKETS_CONNECTION_MISSING:
     case types.SOCKETS_CONNECTION.FAILURE:
+      console.log('=================================lost connection');
       return false;
 
     case types.SOCKETS_CONNECTION.SUCCESS:
+      console.log('---------------------------------return connection');
       return true;
 
     default:
