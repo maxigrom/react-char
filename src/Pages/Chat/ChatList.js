@@ -32,8 +32,8 @@ type Props = {
   activeChat: ?TApiChat,
   myChats: TApiChat[],
   allChats: TApiChat[],
+  disabled: boolean,
 
-  setActiveChat: (chatId: string) => void,
   createChat: (title: string) => void,
 };
 
@@ -77,7 +77,7 @@ class ChatList extends React.Component<Props, State> {
 
   render() {
     const { isOpenModal, chatListType } = this.state;
-    const { allChats, myChats, activeChat, classes } = this.props;
+    const { disabled, allChats, myChats, activeChat, classes } = this.props;
     const displayChatList = chatListType === ALL_CHATS ? allChats : myChats;
 
     return (
@@ -97,7 +97,7 @@ class ChatList extends React.Component<Props, State> {
           <ChatListItem
             key={chat._id}
             chat={chat}
-            onClick={this.props.setActiveChat}
+            disabled={disabled}
             isActive={!!activeChat && chat._id === activeChat._id}
           />,
         )}

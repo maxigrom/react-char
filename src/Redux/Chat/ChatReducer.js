@@ -87,6 +87,8 @@ const chatMap = (state = initialState.chatMap, action) => {
 
     case sockets.RECIEVE_NEW_CHAT:
     case types.CREATE_CHAT.SUCCESS:
+    case types.JOIN_CHAT.SUCCESS:
+    case types.LEAVE_CHAT.SUCCESS:
       return {
         ...state,
         [getChatId(action.payload.chat)]: action.payload.chat,

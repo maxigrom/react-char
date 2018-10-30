@@ -11,7 +11,9 @@ import Menu from './Chat/Menu';
 import type { TApiChatMessage } from '../Types/Api/TApiChatMessage';
 import NewMessage from './Chat/NewMessage';
 import JoinChatButton from './Chat/JoinChatButton';
-import withStyles from '@material-ui/core/es/styles/withStyles';
+import { withStyles } from '@material-ui/core';
+import type { TServiceFetchingState } from '../Redux/Services/ServiceReducer';
+import Loading from '../Components/Loading';
 
 type Props = {
   user: ?TApiUser,
@@ -19,6 +21,10 @@ type Props = {
   myChats: TApiChat[],
   allChats: TApiChat[],
   messages: TApiChatMessage[],
+
+  isFetching: TServiceFetchingState,
+  isFetchingChat: boolean,
+  isFetchingChatActions: boolean,
 
   router: RouterState,
 
@@ -119,13 +125,14 @@ class Chat extends React.Component<Props> {
     }
   };
 
-  getBottomController = () => {
+  getBottomController = (isFetchingChatActions) => {
     const { isChatMember, activeChat } = this.props;
+    const loading = this.props.isFetchingChat || this.props.isFetchingChatActions;
 
     return isChatMember(activeChat) ? (
-      <NewMessage activeChat={activeChat} onSendMessage={this.handleOnSendMessage} />
+      <NewMessage activeChat={activeChat} onSendMessage={this.handleOnSendMessage} loading={loading} />
     ) : (
-      <JoinChatButton onClick={this.handleOnClickJoinChat} />
+      <JoinChatButton onClick={this.handleOnClickJoinChat} loading={loading} />
     );
   };
 
@@ -138,11 +145,13 @@ class Chat extends React.Component<Props> {
       allChats,
       messages,
 
+      isFetching,
+      isFetchingChat,
+
       isCreator,
       isChatMember,
 
       createChat,
-      setActiveChat,
       logout,
 
       leaveChat,
@@ -151,12 +160,13 @@ class Chat extends React.Component<Props> {
 
     return (
       <>
-      <Layout.Drawer>
+      <Loading loading={isFetching.logout} />
+      <Layout.Drawer loading={isFetchingChat}>
         <ChatList
           activeChat={activeChat}
           myChats={myChats}
           allChats={allChats}
-          setActiveChat={setActiveChat}
+          disabled={isFetchingChat}
           createChat={createChat}
         />
       </Layout.Drawer>
@@ -167,6 +177,8 @@ class Chat extends React.Component<Props> {
         isChatMember={isChatMember(activeChat)}
         leaveChat={leaveChat}
         deleteChat={deleteChat}
+        isFetchChatAction={isFetching.leaveChat || isFetching.deleteChat}
+        isLoggingOut={isFetching.logout}
         logout={logout}
       />
       <Layout.Body id={WRAPPER_ID} showDrawer>

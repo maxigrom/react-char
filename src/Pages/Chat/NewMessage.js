@@ -5,6 +5,7 @@ import Input from '@material-ui/core/Input';
 import StyleConstants from '../../Consts/StyleConstants';
 import type { TApiChat } from '../../Types/Api/TApiChat';
 import { withStyles } from '@material-ui/core';
+import Loading from '../../Components/Loading';
 
 type Props = {
   activeChat: ?TApiChat,
@@ -12,6 +13,7 @@ type Props = {
 };
 
 type State = {
+  loading?: boolean,
   inputValues: { [string]: ?string }
 }
 
@@ -53,7 +55,7 @@ class NewMessage extends React.Component<Props, State> {
   };
 
   render() {
-    const { activeChat, classes } = this.props;
+    const { loading, activeChat, classes } = this.props;
     const { inputValues } = this.state;
 
     if (activeChat == null) return null;
@@ -62,6 +64,7 @@ class NewMessage extends React.Component<Props, State> {
 
     return (
       <Paper className={classes.newMessage} elevation={8}>
+        <Loading loading={loading} />
         <form onSubmit={this.handleOnSubmitMessage}>
           <Input fullWidth placeholder='Type your message...' onChange={this.handleOnChangeMessage} value={value} />
         </form>

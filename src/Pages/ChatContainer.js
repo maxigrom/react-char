@@ -1,5 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
+import { logout } from '../Redux/Auth/AuthActions';
 import * as chatActions from '../Redux/Chat/ChatActions';
 import * as socketActions from '../Redux/Sockets/SocketsActions';
 import * as chatReducer from '../Redux/Chat/ChatReducer';
@@ -8,6 +9,8 @@ import { isChatMember, isCreator, isMember } from '../Redux/RootReducer';
 import Chat from './Chat';
 
 const mapStateToProps = (state: TStore) => {
+  const isFetching = state.services.isFetching;
+
   return {
     user: state.auth.user,
     messages: state.messages,
@@ -16,6 +19,10 @@ const mapStateToProps = (state: TStore) => {
     activeChat: chatReducer.getById(state.chats, state.chats.activeId),
     myChats: chatReducer.getByIds(state.chats, state.chats.myIds),
     allChats: chatReducer.getByIds(state.chats, state.chats.ids),
+
+    isFetching: isFetching,
+    isFetchingChat: isFetching.fetchAllChats || isFetching.fetchMyChats || isFetching.fetchChat,
+    isFetchingChatActions: isFetching.joinChat || isFetching.leaveChat || isFetching.deleteChat,
 
     isMember: (chat) => isMember(state, chat),
     isCreator: (chat) => isCreator(state, chat),

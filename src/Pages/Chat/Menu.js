@@ -11,7 +11,7 @@ import type { TApiChat } from '../../Types/Api/TApiChat';
 import MenuContainer from '../../Components/Layout/MenuContainer';
 import TextAvatar from '../../Components/TextAvatar';
 import type { TApiUser } from '../../Types/Api/TApiUser';
-import withStyles from '@material-ui/core/es/styles/withStyles';
+import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
   appBar: {
@@ -37,6 +37,9 @@ type Props = {
   isCreator: boolean,
   isChatMember: boolean,
 
+  isLoggingOut: boolean,
+  isFetchChatAction: boolean,
+
   leaveChat: () => void,
   deleteChat: () => void,
   logout: () => void,
@@ -61,6 +64,9 @@ class Menu extends React.Component<Props> {
       isCreator,
       isChatMember,
 
+      isLoggingOut,
+      isFetchChatAction,
+
       logout,
     } = this.props;
     const appBarClass = classnames({
@@ -80,11 +86,11 @@ class Menu extends React.Component<Props> {
             {activeChat.title}
           </Typography>
           {isChatMember && (isCreator ? (
-            <Button color='inherit' onClick={this.handleOnClickDeleteChat}>Delete Chat</Button>
+            <Button color='inherit' onClick={this.handleOnClickDeleteChat} disabled={isFetchChatAction}>Delete Chat</Button>
           ) : (
-            <Button color='inherit' onClick={this.handleOnClickLeaveChat}>Leave Chat</Button>
+            <Button color='inherit' onClick={this.handleOnClickLeaveChat} disabled={isFetchChatAction}>Leave Chat</Button>
           ))}
-          <Button color='inherit' onClick={logout}>Logout</Button>
+          <Button color='inherit' disabled={isLoggingOut} onClick={logout}>Logout</Button>
         </Toolbar>
       </AppBar>
     );

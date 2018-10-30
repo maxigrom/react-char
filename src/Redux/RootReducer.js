@@ -8,18 +8,23 @@ import ChatReducer from './Chat/ChatReducer';
 import combineReducers from 'redux/src/combineReducers';
 import MessagesReducer from './Messages/MessagesReducer';
 import type { TApiUserInfo } from '../Types/Api/TApiUserInfo';
+import type { TApiChatMessage } from '../Types/Api/TApiChatMessage';
+import type { TServiceReducerState } from './Services/ServiceReducer';
+import ServiceReducer from './Services/ServiceReducer';
 
 export type TStore = {
   auth: TAuthState,
   chats: TChatState,
   notifications: TNotificationsState,
-  messages: Object[],
+  services: TServiceReducerState,
+  messages: TApiChatMessage[],
 };
 
 export const RootReducer = combineReducers({
   auth: AuthReducer,
   chats: ChatReducer,
   notifications: NotificationReducer,
+  services: ServiceReducer,
   messages: MessagesReducer,
 });
 
