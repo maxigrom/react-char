@@ -1,6 +1,7 @@
 /* eslint max-len: ["error", { "code": 3841 }] */
 // @flow
 import urljoin from 'url-join';
+import ConfigHelper from '../../Helpers/ConfigHelper';
 
 const fetch = require('isomorphic-fetch');
 
@@ -29,8 +30,6 @@ export const getParams = (method: string, token: ?string, data?: mixed): Object 
   return params;
 };
 
-const DEFAULT_URL = 'http://localhost:8000/v1/';
-
 function getJson(response) {
   return response.json().then((json) => {
     if (json.success) return json;
@@ -39,7 +38,7 @@ function getJson(response) {
 }
 
 class BasicApi {
-  constructor(apiUrl: string = DEFAULT_URL) {
+  constructor(apiUrl: string = ConfigHelper.API_URI) {
     this.apiUrl = apiUrl;
   }
 

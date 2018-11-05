@@ -2,6 +2,7 @@ import SocketIOClient from 'socket.io-client';
 import { push } from 'connected-react-router';
 import * as types from './SocketsActionTypes';
 import { pushFailure } from '../Notification/NotificationActions';
+import ConfigHelper from '../../Helpers/ConfigHelper';
 
 const connect = () => ({
   type: types.SOCKETS_CONNECTION.SUCCESS,
@@ -28,7 +29,7 @@ const deletedChat = chat => ({
 });
 
 const createSocket = (token, dispatch, getState) => {
-  const socket = SocketIOClient('ws://localhost:8000/', {
+  const socket = SocketIOClient(ConfigHelper.SOCKETS_URI, {
     query: { token },
   });
 
