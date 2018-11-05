@@ -28,7 +28,7 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <CssBaseline />
+          <CssBaseline />
         <MuiThemeProvider theme={DefaultTheme}>
           <SnackbarProvider maxSnack={5}>
             <Provider store={store}>

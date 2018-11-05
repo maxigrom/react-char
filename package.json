@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --hot --config webpack.dev.config.babel.js",
+    "dev": "webpack-dev-server --hot --config webpack.dev.config.babel.js",
+    "start": "node index.js",
     "build": "webpack --config webpack.prod.config.babel.js",
     "flow": "flow",
     "lint": "eslint 'src/**/*.js'",
@@ -22,6 +23,7 @@
     "connected-react-router": "^4.5.0",
     "dayjs": "^1.7.7",
     "es6-promise": "^4.2.5",
+    "express": "^4.16.4",
     "flow-bin": "^0.82.0",
     "history": "^4.7.2",
     "isomorphic-fetch": "^2.2.1",
@@ -43,6 +45,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "regenerator-runtime": "^0.12.1",
+    "serve": "^10.0.2",
     "socket.io-client": "^2.1.1",
     "url-join": "^4.0.0",
     "webpack-bundle-analyzer": "^3.0.2",
@@ -85,12 +88,12 @@
     "webpack-dev-server": "^3.1.9"
   },
   "lint-staged": {
-    "**/*.{js,jsx}": [
+    "./src/*.{js,jsx}": [
       "npm run lint:fix",
       "npm run format",
       "git add"
     ],
-    "**/*.json": [
+    "./src/*.json": [
       "npm run format",
       "git add"
     ]
