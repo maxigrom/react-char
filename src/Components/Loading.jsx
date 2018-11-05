@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/es/Typography/Typography';
-import Paper from '@material-ui/core/es/Paper/Paper';
-import withStyles from '@material-ui/core/es/styles/withStyles';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
   wrapper: {

@@ -1,5 +1,5 @@
 // @flow
-import combineReducers from 'redux/src/combineReducers';
+import { combineReducers } from 'redux';
 import type { TAuthState } from './Auth/AuthReducer';
 import AuthReducer from './Auth/AuthReducer';
 import type { TNotificationsState } from './Notification/NotificationReducer';
