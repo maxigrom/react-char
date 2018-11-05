@@ -1,4 +1,4 @@
-//@flow
+// @flow
 import createRequestAction from '../createRequestAction';
 
 export const FETCH_ALL_CHATS = createRequestAction('chat/FETCH_ALL_CHATS');

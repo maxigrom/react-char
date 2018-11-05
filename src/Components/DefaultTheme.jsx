@@ -4,10 +4,7 @@ const SPACE_UNIT = 8;
 
 const DefaultTheme = createMuiTheme({
   typography: {
-    fontFamily: [
-      'Noto Sans',
-      'sans-serif',
-    ].join(',')
+    fontFamily: ['Noto Sans', 'sans-serif'].join(','),
   },
   spacing: {
     unit: SPACE_UNIT,
@@ -15,7 +12,7 @@ const DefaultTheme = createMuiTheme({
     sm: SPACE_UNIT * 2,
     md: SPACE_UNIT * 4,
     lg: SPACE_UNIT * 8,
-  }
+  },
 });
 
 export default DefaultTheme;

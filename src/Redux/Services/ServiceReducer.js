@@ -2,11 +2,6 @@
 import { combineReducers } from 'redux';
 import * as types from '../actionTypes';
 
-export type TServiceReducerState = {
-  isFetching: TServiceFetchingState,
-  isConnected: boolean,
-};
-
 export type TServiceFetchingState = {
   signup: boolean,
   login: boolean,
@@ -23,6 +18,11 @@ export type TServiceFetchingState = {
 
   sockets: boolean,
   editUser: boolean,
+};
+
+export type TServiceReducerState = {
+  isFetching: TServiceFetchingState,
+  isConnected: boolean,
 };
 
 const intialState: TServiceReducerState = {
@@ -84,8 +84,8 @@ export const isFetching = (state: TServiceFetchingState = intialState.isFetching
     case types.SOCKETS_CONNECTION.REQUEST:
       return { ...state, sockets: true };
 
-    //case types.EDIT_USER.REQUEST:
-    // return { ...state, editUser: true };
+      // case types.EDIT_USER.REQUEST:
+      // return { ...state, editUser: true };
 
     case types.SIGNUP.SUCCESS:
     case types.SIGNUP.FAILURE:
@@ -135,8 +135,8 @@ export const isFetching = (state: TServiceFetchingState = intialState.isFetching
     case types.SOCKETS_CONNECTION.FAILURE:
       return { ...state, sockets: false };
 
-    //case types.EDIT_USER.SUCCESS:
-    //case types.EDIT_USER.FAILURE:
+    // case types.EDIT_USER.SUCCESS:
+    // case types.EDIT_USER.FAILURE:
     // return { ...state, editUser: false };
     default:
       return state;

@@ -2,6 +2,6 @@
 import type { TSnackbarOptionsVariant } from './TSnackbarOptionsVariant';
 
 export type TSnackbarOptions = {
-  variant:       ?TSnackbarOptionsVariant,
+  variant: ?TSnackbarOptionsVariant,
   onClickAction: () => void,
-}
+};

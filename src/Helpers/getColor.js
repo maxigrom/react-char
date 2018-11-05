@@ -13,21 +13,7 @@ import deepOrange from '@material-ui/core/colors/deepOrange';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 
-const colors = [
-  red,
-  pink,
-  purple,
-  indigo,
-  blue,
-  teal,
-  green,
-  lightGreen,
-  amber,
-  orange,
-  deepOrange,
-  deepPurple,
-  blueGrey,
-];
+const colors = [red, pink, purple, indigo, blue, teal, green, lightGreen, amber, orange, deepOrange, deepPurple, blueGrey];
 
 export const getColor = (smth: mixed, pallete: number = 500): string => {
   try {

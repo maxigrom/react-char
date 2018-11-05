@@ -6,7 +6,7 @@ import MUIDrawer from '@material-ui/core/Drawer';
 import StyleConstants from '../../Consts/StyleConstants';
 import Loading from '../Loading';
 
-const styles = theme => ({
+const styles = {
   drawer: {
     width: StyleConstants.DrawerWidth,
   },
@@ -15,7 +15,7 @@ const styles = theme => ({
     width: StyleConstants.DrawerWidth,
     overflowX: 'hidden',
   },
-});
+};
 
 type Props = {
   children: React.Node,
@@ -27,17 +27,17 @@ const Drawer = (props: Props) => {
 
   return (
     <>
-    <MUIDrawer
-      anchor='left'
-      variant='permanent'
-      className={classes.drawer}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      {children}
-      <Loading loading={loading} />
-    </MUIDrawer>
+      <MUIDrawer
+        anchor="left"
+        variant="permanent"
+        className={classes.drawer}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        {children}
+        <Loading loading={loading} />
+      </MUIDrawer>
     </>
   );
 };

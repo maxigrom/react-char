@@ -5,12 +5,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Meow from '../Meow';
-import StyleConstants from '../../Consts/StyleConstants';
 import * as classnames from 'classnames';
 import Button from '@material-ui/core/Button';
+import Meow from '../Meow';
+import StyleConstants from '../../Consts/StyleConstants';
 
-const styles = theme => ({
+const styles = {
   appBar: {
     width: '100%',
     position: 'fixed',
@@ -29,32 +29,37 @@ const styles = theme => ({
     marginLeft: -12,
     marginRight: 20,
   },
-});
+};
 
 type Props = {
   showDrawer?: boolean,
   showLogoutButton: boolean,
   onClickLogout: () => void,
+
+  classes?: Object,
 };
 
-const Menu = (props: Props) => {
-  const { showDrawer, classes, showLogoutButton, onClickLogout } = props;
+const Menu = ({
+  showDrawer, classes, showLogoutButton, onClickLogout,
+}: Props) => {
   const appBarClass = classnames({
     [classes.appBar]: true,
     [classes.appBarWithDrawer]: showDrawer,
   });
 
   return (
-    <AppBar position='absolute' className={appBarClass}>
+    <AppBar position="absolute" className={appBarClass}>
       <Toolbar>
-        <IconButton className={classes.menuButton} color='inherit' aria-label='Menu'>
+        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
           <Meow />
         </IconButton>
-        <Typography variant='title' color='inherit' className={classes.grow}>
+        <Typography variant="title" color="inherit" className={classes.grow}>
           Welcome to React Chat
         </Typography>
         {showLogoutButton && (
-          <Button color='inherit' onClick={onClickLogout}>Logout</Button>
+          <Button color="inherit" onClick={onClickLogout}>
+            Logout
+          </Button>
         )}
       </Toolbar>
     </AppBar>

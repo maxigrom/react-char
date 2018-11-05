@@ -1,17 +1,16 @@
 // @flow
 import * as React from 'react';
-import ChatMessage from './Chat/ChatMessage';
 import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core';
+import ChatMessage from './Chat/ChatMessage';
 import Layout from '../Components/Layout';
 import ChatList from './Chat/ChatList';
 import type { TApiUser } from '../Types/Api/TApiUser';
 import type { TApiChat } from '../Types/Api/TApiChat';
-import type { RouterState } from 'conn';
 import Menu from './Chat/Menu';
 import type { TApiChatMessage } from '../Types/Api/TApiChatMessage';
 import NewMessage from './Chat/NewMessage';
 import JoinChatButton from './Chat/JoinChatButton';
-import { withStyles } from '@material-ui/core';
 import type { TServiceFetchingState } from '../Redux/Services/ServiceReducer';
 import Loading from '../Components/Loading';
 
@@ -27,9 +26,8 @@ type Props = {
   isFetchingChatActions: boolean,
   isConnected: boolean,
 
-  router: RouterState,
+  router: Object,
 
-  isMember: (chat: ?TApiChat) => boolean,
   isCreator: (chat: ?TApiChat) => boolean,
   isChatMember: (chat: ?TApiChat) => boolean,
 
@@ -42,15 +40,17 @@ type Props = {
   deleteChat: (chatId: string) => void,
 
   socketsConnect: () => void,
-  mountChat: (chatId) => void,
-  unmountChat: (chatId) => void,
+  mountChat: chatId => void,
+  unmountChat: chatId => void,
   sendMessage: (chatId: string, messageText: string) => void,
 
   logout: () => void,
+
+  classes?: Object,
 };
 
 type State = {
-  socketIntervalId: ?number
+  socketIntervalId: ?number,
 };
 
 const styles = theme => ({
@@ -60,7 +60,9 @@ const styles = theme => ({
 });
 
 const getChatId = (path: string): ?string => {
-  const params = path.toLowerCase().split('/')
+  const params = path
+    .toLowerCase()
+    .split('/')
     .map(s => s.trim())
     .filter(s => s.length > 0);
 
@@ -79,32 +81,22 @@ class Chat extends React.Component<Props> {
 
   componentDidMount() {
     const {
-      fetchAllChats,
-      fetchMyChats,
-      setActiveChat,
-      socketsConnect,
-      mountChat,
+      fetchAllChats, fetchMyChats, setActiveChat, socketsConnect, mountChat,
     } = this.props;
 
-    Promise.all([fetchAllChats(), fetchMyChats()]).then(() => {
-      socketsConnect();
-    }).then(() => {
-      const id = getChatId(this.props.router.location.pathname);
+    Promise.all([fetchAllChats(), fetchMyChats()])
+      .then(() => {
+        socketsConnect();
+      })
+      .then(() => {
+        const id = getChatId(this.props.router.location.pathname);
 
-      if (id) {
-        setActiveChat(id);
-        mountChat(id);
-      }
-    });
+        if (id) {
+          setActiveChat(id);
+          mountChat(id);
+        }
+      });
 
-    this.scrollToBottom();
-  }
-
-  componentWillUnmount() {
-    this.stopSocketConnecting();
-  }
-
-  componentDidUpdate() {
     this.scrollToBottom();
   }
 
@@ -127,6 +119,14 @@ class Chat extends React.Component<Props> {
       unmountChat(currentId);
       mountChat(nextId);
     }
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  componentWillUnmount() {
+    this.stopSocketConnecting();
   }
 
   runSocketConnecting = () => {
@@ -165,7 +165,7 @@ class Chat extends React.Component<Props> {
     }
   };
 
-  getBottomController = (isFetchingChatActions) => {
+  getBottomController = () => {
     const { isChatMember, activeChat } = this.props;
     const loading = this.props.isFetchingChat || this.props.isFetchingChatActions;
 
@@ -201,50 +201,35 @@ class Chat extends React.Component<Props> {
 
     return (
       <>
-      <Loading loading={isFetching.logout} />
-      <Loading loading={!isConnected} message='We have lost a connection :(' />
-      <Layout.Drawer loading={isFetchingChat}>
-        <ChatList
+        <Loading loading={isFetching.logout} />
+        <Loading loading={!isConnected} message="We have lost a connection :(" />
+        <Layout.Drawer loading={isFetchingChat}>
+          <ChatList activeChat={activeChat} myChats={myChats} allChats={allChats} disabled={isFetchingChat} createChat={createChat} />
+        </Layout.Drawer>
+        <Menu
+          user={user}
           activeChat={activeChat}
-          myChats={myChats}
-          allChats={allChats}
-          disabled={isFetchingChat}
-          createChat={createChat}
+          isCreator={isCreator(activeChat)}
+          isChatMember={isChatMember(activeChat)}
+          leaveChat={leaveChat}
+          deleteChat={deleteChat}
+          isFetchChatAction={isFetching.leaveChat || isFetching.deleteChat}
+          isLoggingOut={isFetching.logout}
+          logout={logout}
         />
-      </Layout.Drawer>
-      <Menu
-        user={user}
-        activeChat={activeChat}
-        isCreator={isCreator(activeChat)}
-        isChatMember={isChatMember(activeChat)}
-        leaveChat={leaveChat}
-        deleteChat={deleteChat}
-        isFetchChatAction={isFetching.leaveChat || isFetching.deleteChat}
-        isLoggingOut={isFetching.logout}
-        logout={logout}
-      />
-      <Layout.Body id={WRAPPER_ID} showDrawer>
-        <Grid
-          container
-          spacing={16}
-          direction='column'
-          className={classes.chatContainer}
-          alignItems={'flex-start'}
-        >
-          {messages.map((chatMessage, i) => (
-            <Grid item xs={12} key={i} style={chatMessage.statusMessage ? { width: '100%' } : null}>
-              <ChatMessage
-                chatMessage={chatMessage}
-                isCurrentUser={chatMessage.sender._id === user._id}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        {activeChat != null && this.getBottomController()}
-      </Layout.Body>
+        <Layout.Body id={WRAPPER_ID} showDrawer>
+          <Grid container spacing={16} direction="column" className={classes.chatContainer} alignItems="flex-start">
+            {messages.map(chatMessage => (
+              <Grid item xs={12} key={chatMessage._id} style={chatMessage.statusMessage ? { width: '100%' } : null}>
+                <ChatMessage chatMessage={chatMessage} isCurrentUser={chatMessage.sender._id === user._id} />
+              </Grid>
+            ))}
+          </Grid>
+          {activeChat != null && this.getBottomController()}
+        </Layout.Body>
       </>
     );
-  };
+  }
 }
 
 export default withStyles(styles)(Chat);

@@ -1,7 +1,9 @@
 // @flow
 import type { TApiUser } from '../../Types/Api/TApiUser';
 import LocalStorageHelper from '../../Helpers/LocalStorageHelper';
-import { LOGIN, LOGOUT, RECEIVE_AUTH, SIGNUP } from './AuthActionTypes';
+import {
+  LOGIN, LOGOUT, RECEIVE_AUTH, SIGNUP,
+} from './AuthActionTypes';
 
 export type TAuthState = {|
   user: ?TApiUser,
@@ -13,7 +15,7 @@ const token = LocalStorageHelper.getAuthToken();
 
 const initialState: TAuthState = {
   user: null,
-  token: token,
+  token,
   isAuthenticated: !!token,
 };
 

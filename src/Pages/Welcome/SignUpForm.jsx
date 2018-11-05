@@ -2,12 +2,12 @@
 import * as React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Redirect } from 'react-router-dom';
+import { withStyles } from '@material-ui/core';
 import type { TLoginUser } from '../../Types/TLoginUser';
 import type { TValueWithError } from '../../Models/ValueWithError';
-import { newValueWithError } from '../../Models/ValueWithError';
-import { Redirect } from 'react-router-dom';
+import newValueWithError from '../../Models/ValueWithError';
 import Loading from '../../Components/Loading';
-import { withStyles } from '@material-ui/core';
 
 type Props = {|
   classes: Object,
@@ -73,11 +73,11 @@ class SignUpForm extends React.Component<Props, State> {
     });
   };
 
-  validateForm = () => {
-    return new Promise(resolve => {
-      let isValid = true;
+  validateForm = () => new Promise((resolve) => {
+    let isValid = true;
 
-      this.setState(prevState => {
+    this.setState(
+      (prevState) => {
         const newState = { ...prevState };
         if (prevState.userName.value.length === 0) {
           isValid = false;
@@ -86,8 +86,8 @@ class SignUpForm extends React.Component<Props, State> {
 
         if (prevState.password.value !== prevState.passwordRepeat.value) {
           isValid = false;
-          newState.password.error = 'Passwords aren\'t equal';
-          newState.passwordRepeat.error = 'Passwords aren\'t equal';
+          newState.password.error = "Passwords aren't equal";
+          newState.passwordRepeat.error = "Passwords aren't equal";
         } else {
           newState.password.error = null;
           newState.passwordRepeat.error = null;
@@ -104,61 +104,62 @@ class SignUpForm extends React.Component<Props, State> {
         }
 
         return newState;
-      }, () => resolve(isValid));
-    });
-  };
+      },
+      () => resolve(isValid),
+    );
+  });
 
   render() {
     const { classes, redirectToChat, loading } = this.props;
     const { userName, password, passwordRepeat } = this.state;
 
-    if (redirectToChat) return (<Redirect to='/chat' push />);
+    if (redirectToChat) return <Redirect to="/chat" push />;
 
     return (
       <div style={{ position: 'relative' }}>
         <Loading loading={loading} />
-        <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete='off'>
+        <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete="off">
           <TextField
-            name='userName'
-            label='User Name'
+            name="userName"
+            label="User Name"
             className={classes.textField}
             value={userName.value}
             error={!!userName.error}
             helperText={userName.error || ' '}
             onChange={this.handleOnChange}
-            margin='normal'
+            margin="normal"
           />
           <div className={classes.passwords}>
             <TextField
-              name='password'
-              label='Password'
+              name="password"
+              label="Password"
               className={classes.textField}
               value={password.value}
               error={!!password.error}
               helperText={password.error || ' '}
               onChange={this.handleOnChange}
-              margin='normal'
-              type='password'
+              margin="normal"
+              type="password"
             />
             <TextField
-              name='passwordRepeat'
-              label='Repeat Password'
+              name="passwordRepeat"
+              label="Repeat Password"
               className={classes.textField}
               value={passwordRepeat.value}
               error={!!passwordRepeat.error}
               helperText={passwordRepeat.error || ' '}
               onChange={this.handleOnChange}
-              margin='normal'
-              type='password'
+              margin="normal"
+              type="password"
             />
           </div>
-          <Button type='submit' variant='contained' color='primary' className={classes.submitButton}>
+          <Button type="submit" variant="contained" color="primary" className={classes.submitButton}>
             Sign up
           </Button>
         </form>
       </div>
     );
-  };
+  }
 }
 
 export default withStyles(styles)(SignUpForm);

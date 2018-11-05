@@ -12,7 +12,7 @@ type Props = {
 };
 
 type State = {
-  notifications: TNotification[]
+  notifications: TNotification[],
 };
 
 class Notifications extends React.Component<Props, State> {
@@ -41,13 +41,15 @@ class Notifications extends React.Component<Props, State> {
     if (storeNotifications.length === 0) return;
 
     const notification = storeNotifications[0];
-    this.props.enqueueSnackbar(notification.message, { variant: notification.type });
+    this.props.enqueueSnackbar(notification.message, {
+      variant: notification.type,
+    });
     Store.dispatch(pop());
   };
 
   render() {
     return null;
-  };
+  }
 }
 
 export default withSnackbar(Notifications);

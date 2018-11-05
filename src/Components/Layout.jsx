@@ -3,8 +3,8 @@ import Drawer from './Layout/Drawer';
 import MenuContainer from './Layout/MenuContainer';
 
 const Layout = {
-  Body: Body,
-  Drawer: Drawer,
+  Body,
+  Drawer,
   Menu: MenuContainer,
 };
 

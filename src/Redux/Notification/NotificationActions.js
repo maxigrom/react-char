@@ -11,12 +11,12 @@ export const pop = () => ({
   type: POP,
 });
 
-export const push_success = message => push({
-  message: message,
+export const pushSuccess = message => push({
+  message,
   type: 'success',
 });
 
-export const push_failure = message => push({
-  message: message,
+export const pushFailure = message => push({
+  message,
   type: 'error',
 });

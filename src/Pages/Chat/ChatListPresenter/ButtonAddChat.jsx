@@ -13,21 +13,19 @@ const styles = theme => ({
 });
 
 type Props = {
-  onClick: () => void
+  onClick: () => void,
+
+  classes?: Object,
 };
 
-class ButtonAddChat extends React.Component<Props> {
-  props: Props;
+const ButtonAddChat = (props: Props) => {
+  const { classes } = props;
 
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <Button variant='fab' color='primary' aria-label='Add' className={classes.buttonAdd} onClick={this.props.onClick}>
-        <AddIcon />
-      </Button>
-    );
-  };
-}
+  return (
+    <Button variant="fab" color="primary" aria-label="Add" className={classes.buttonAdd} onClick={props.onClick}>
+      <AddIcon />
+    </Button>
+  );
+};
 
 export default withStyles(styles)(ButtonAddChat);

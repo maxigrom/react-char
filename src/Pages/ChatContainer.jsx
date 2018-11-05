@@ -20,14 +20,14 @@ const mapStateToProps = (state: TStore) => {
     myChats: chatReducer.getByIds(state.chats, state.chats.myIds),
     allChats: chatReducer.getByIds(state.chats, state.chats.ids),
 
-    isFetching: isFetching,
+    isFetching,
     isFetchingChat: isFetching.fetchAllChats || isFetching.fetchMyChats || isFetching.fetchChat,
     isFetchingChatActions: isFetching.joinChat || isFetching.leaveChat || isFetching.deleteChat,
     isConnected: state.services.isConnected,
 
-    isMember: (chat) => isMember(state, chat),
-    isCreator: (chat) => isCreator(state, chat),
-    isChatMember: (chat) => isChatMember(state, chat),
+    isMember: chat => isMember(state, chat),
+    isCreator: chat => isCreator(state, chat),
+    isChatMember: chat => isChatMember(state, chat),
   };
 };
 
@@ -37,15 +37,18 @@ const mapDispatchToProps = dispatch => ({
   setActiveChat: (chatId: string) => dispatch(chatActions.setActiveChat(chatId)),
   createChat: (title: string) => dispatch(chatActions.createChat(title)),
 
-  joinChat: (chatId) => dispatch(chatActions.joinChat(chatId)),
-  leaveChat: (chatId) => dispatch(chatActions.leaveChat(chatId)),
-  deleteChat: (chatId) => dispatch(chatActions.deleteChat(chatId)),
+  joinChat: chatId => dispatch(chatActions.joinChat(chatId)),
+  leaveChat: chatId => dispatch(chatActions.leaveChat(chatId)),
+  deleteChat: chatId => dispatch(chatActions.deleteChat(chatId)),
 
   socketsConnect: () => dispatch(socketActions.socketsConnect()),
-  mountChat: (chatId) => dispatch(socketActions.mountChat(chatId)),
-  unmountChat: (chatId) => dispatch(socketActions.unmountChat(chatId)),
+  mountChat: chatId => dispatch(socketActions.mountChat(chatId)),
+  unmountChat: chatId => dispatch(socketActions.unmountChat(chatId)),
   sendMessage: (chatId, messageText) => dispatch(socketActions.sendMessage(chatId, messageText)),
   logout: () => dispatch(logout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Chat);

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/es/Typography/Typography';
 import Paper from '@material-ui/core/es/Paper/Paper';
 import withStyles from '@material-ui/core/es/styles/withStyles';
 
-const styles = (theme) => ({
+const styles = theme => ({
   wrapper: {
     position: 'absolute',
     top: 0,
@@ -24,7 +24,7 @@ const styles = (theme) => ({
     position: 'absolute',
     top: '0',
     left: '0',
-    transform: `translate(-50%, -50%)`,
+    transform: 'translate(-50%, -50%)',
   },
   paper: {
     ...theme.mixins.gutters(),
@@ -45,10 +45,14 @@ type Props = {
   height?: number,
   loading?: boolean,
   message?: string,
+
+  classes?: Object,
 };
 
 const Loading = (props: Props) => {
-  const { width, height, loading, message, classes } = props;
+  const {
+    width, height, loading, message, classes,
+  } = props;
   if (!loading) return null;
 
   const wrapperStyle = {
@@ -63,10 +67,10 @@ const Loading = (props: Props) => {
     <div className={classes.wrapper} style={wrapperStyle}>
       <div className={classes.wrapperCenter}>
         <div className={classes.center}>
-          <CircularProgress style={loadingIconStyles} color='secondary' />
+          <CircularProgress style={loadingIconStyles} color="secondary" />
           {message && (
             <Paper className={classes.paper} elevation={1}>
-              <Typography color='secondary' component='p' variant='display1'>
+              <Typography color="secondary" component="p" variant="display1">
                 {message}
               </Typography>
             </Paper>

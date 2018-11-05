@@ -2,10 +2,10 @@
 import * as React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { Route } from 'react-router-dom';
 import DateHelper from '../../../Helpers/DateHelper';
 import TextAvatar from '../../../Components/TextAvatar';
 import type { TApiChat } from '../../../Types/Api/TApiChat';
-import { Route } from 'react-router-dom';
 
 type Props = {
   chat: TApiChat,
@@ -34,7 +34,7 @@ class ChatListItem extends React.Component<Props> {
         )}
       />
     );
-  };
+  }
 }
 
 export default ChatListItem;

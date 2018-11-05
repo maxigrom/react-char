@@ -7,15 +7,17 @@ import ChatIcon from '@material-ui/icons/Chat';
 import ExploreIcon from '@material-ui/icons/Explore';
 import StyleConstants from '../../../Consts/StyleConstants';
 
-const styles = theme => ({
+const styles = {
   navigation: {
     width: StyleConstants.DrawerWidth,
   },
-});
+};
 
 type Props = {
   currentChatListType: string,
-  onClick: (chatType: string) => void
+  onClick: (chatType: string) => void,
+
+  classes?: Object,
 };
 
 class ChatNavigation extends React.Component<Props> {
@@ -33,25 +35,12 @@ class ChatNavigation extends React.Component<Props> {
     const { classes, currentChatListType } = this.props;
 
     return (
-      <BottomNavigation
-        showLabels
-        value={currentChatListType === 'MY_CHATS' ? 0 : 1}
-        className={classes.navigation}
-      >
-        <BottomNavigationAction
-          label='My Chats'
-          icon={<ChatIcon />}
-          onClick={this.handleOnClickShowMyChats}
-        />
-        <BottomNavigationAction
-          label='Find Chat'
-          icon={<ExploreIcon />}
-          onClick={this.handleOnClickShowAllChats}
-        />
+      <BottomNavigation showLabels value={currentChatListType === 'MY_CHATS' ? 0 : 1} className={classes.navigation}>
+        <BottomNavigationAction label="My Chats" icon={<ChatIcon />} onClick={this.handleOnClickShowMyChats} />
+        <BottomNavigationAction label="Find Chat" icon={<ExploreIcon />} onClick={this.handleOnClickShowAllChats} />
       </BottomNavigation>
     );
-
-  };
-};
+  }
+}
 
 export default withStyles(styles)(ChatNavigation);

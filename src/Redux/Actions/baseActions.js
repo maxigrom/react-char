@@ -1,7 +1,22 @@
 // @flow
 import type { FGetState } from '../../Types/Redux/FGetState';
 import type { TRequestActionType } from '../../Types/Redux/TRequestActionType';
-import { push_failure } from '../Notification/NotificationActions';
+import { pushFailure } from '../Notification/NotificationActions';
+
+export const dispatchErrors = (dispatch, actionType, reason) => {
+  let strReason = reason;
+  if (typeof reason === 'object') {
+    console.error(reason);
+    strReason = reason.toString();
+  }
+
+  dispatch(pushFailure(strReason));
+
+  dispatch({
+    type: actionType.FAILURE,
+    strReason,
+  });
+};
 
 export function sendRequest(actionType: TRequestActionType, getRequestPromise: Promise, isFetchingProp: string) {
   return (dispatch, getState: FGetState): Promise => {
@@ -11,16 +26,18 @@ export function sendRequest(actionType: TRequestActionType, getRequestPromise: P
     dispatch({ type: actionType.REQUEST });
 
     const { token } = getState().auth;
-    return getRequestPromise(token).then((json: TChatsJson) => {
-      dispatch({
-        type: actionType.SUCCESS,
-        payload: json,
-      });
+    return getRequestPromise(token)
+      .then((json: TChatsJson) => {
+        dispatch({
+          type: actionType.SUCCESS,
+          payload: json,
+        });
 
-      return json;
-    }).catch(reason => {
-      dispatchErrors(dispatch, actionType, reason);
-    });
+        return json;
+      })
+      .catch((reason) => {
+        dispatchErrors(dispatch, actionType, reason);
+      });
   };
 }
 
@@ -31,18 +48,4 @@ export function sendRequestWithTokenChecking(actionType: TRequestActionType, get
 
     return sendRequest(actionType, getRequestPromise, isFetchingProp)(dispatch, getState);
   };
-};
-
-export const dispatchErrors = (dispatch, actionType, reason) => {
-  if (typeof reason === 'object') {
-    console.error(reason);
-    reason = reason.toString();
-  }
-
-  dispatch(push_failure(reason));
-
-  dispatch({
-    type: actionType.FAILURE,
-    reason: reason,
-  });
-};
+}

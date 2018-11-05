@@ -21,10 +21,13 @@ type Props = {
   id?: string,
   children: React.Node,
   showDrawer?: boolean,
-}
+  classes?: Object,
+};
 
 const Body = (props: Props) => {
-  const { classes, showDrawer, children, id } = props;
+  const {
+    classes, showDrawer, children, id,
+  } = props;
 
   return (
     <main id={id} className={classes.content} style={{ left: showDrawer ? StyleConstants.DrawerWidth : 0 }}>

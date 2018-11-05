@@ -1,4 +1,4 @@
-//@flow
+// @flow
 import createRequestAction from '../createRequestAction';
 
 export const SOCKETS_CONNECTION = createRequestAction('sockets/SOCKETS_CONNECTION');

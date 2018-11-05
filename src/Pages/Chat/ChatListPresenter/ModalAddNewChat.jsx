@@ -7,14 +7,6 @@ import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 
-function getModalStyle() {
-  return {
-    top: `50%`,
-    left: `50%`,
-    transform: `translate(-50%, -50%)`,
-  };
-}
-
 const styles = theme => ({
   paper: {
     position: 'absolute',
@@ -24,10 +16,10 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4,
   },
   modal: {
-    top: `50%`,
-    left: `50%`,
-    transform: `translate(-50%, -50%)`,
-    width: `50%`,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '50%',
   },
   button: {
     margin: theme.spacing.unit,
@@ -38,11 +30,13 @@ type Props = {
   isOpen: boolean,
   onClose: () => void,
   onCreate: () => void,
+
+  classes?: Object,
 };
 
 type State = {
-  title: string;
-}
+  title: string,
+};
 
 class ModalAddNewChat extends React.Component<Props, State> {
   props: Props;
@@ -74,25 +68,20 @@ class ModalAddNewChat extends React.Component<Props, State> {
     const { isOpen, classes } = this.props;
 
     return (
-      <Modal
-        aria-labelledby='simple-modal-title'
-        aria-describedby='simple-modal-description'
-        open={isOpen}
-        onClose={this.handleOnCloseModal}
-      >
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isOpen} onClose={this.handleOnCloseModal}>
         <div className={`${classes.paper} ${classes.modal}`}>
-          <Typography variant='title' id='modal-title'>
+          <Typography variant="title" id="modal-title">
             Create new chat
           </Typography>
-          <Grid container direction='column'>
+          <Grid container direction="column">
             <Grid item xs>
-              <Input fullWidth placeholder='Enter the title...' value={title} onChange={this.handleOnChangeTitle} />
+              <Input fullWidth placeholder="Enter the title..." value={title} onChange={this.handleOnChangeTitle} />
             </Grid>
             <Grid item xs>
-              <Button variant='contained' color='primary' className={classes.button} onClick={this.handleOnClickCreate}>
+              <Button variant="contained" color="primary" className={classes.button} onClick={this.handleOnClickCreate}>
                 Create
               </Button>
-              <Button variant='contained' className={classes.button} onClick={this.handleOnCloseModal}>
+              <Button variant="contained" className={classes.button} onClick={this.handleOnCloseModal}>
                 Cancel
               </Button>
             </Grid>
@@ -100,7 +89,7 @@ class ModalAddNewChat extends React.Component<Props, State> {
         </div>
       </Modal>
     );
-  };
+  }
 }
 
 export default withStyles(styles)(ModalAddNewChat);
