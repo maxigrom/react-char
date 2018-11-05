@@ -3,8 +3,6 @@ import merge from 'webpack-merge';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import { getBaseConfig, absoluteDistPath, distPath } from './webpack.config.babel';
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 const rootPath = path.resolve(__dirname, distPath);
 
 const cleanPlugin = new CleanWebpackPlugin([absoluteDistPath], {
@@ -14,7 +12,7 @@ const cleanPlugin = new CleanWebpackPlugin([absoluteDistPath], {
 
 module.exports = merge(getBaseConfig(true), {
   mode: 'production',
-  plugins: [cleanPlugin, new BundleAnalyzerPlugin()],
+  plugins: [cleanPlugin],
   optimization: {
     splitChunks: {
       chunks: 'async',
