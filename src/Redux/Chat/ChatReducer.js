@@ -19,7 +19,7 @@ const initialState: TChatState = {
 
 export const getChatId = chat => chat._id;
 export const getById = (state, id) => state.chatMap[id];
-export const getByIds = (state, ids) => [].concat(ids).map(id => getById(state, id));
+export const getByIds = (state, ids) => [].concat(ids).map(id => getById(state, id)).filter(chat => !!chat);
 
 function deleteChatById(state, chatId) {
   const newState = { ...state };
