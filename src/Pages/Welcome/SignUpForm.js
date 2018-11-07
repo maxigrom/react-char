@@ -1,15 +1,17 @@
 // @flow
 import * as React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import type { TLoginUser } from '../../Types/TLoginUser';
 import type { TValueWithError } from '../../Models/ValueWithError';
 import { newValueWithError } from '../../Models/ValueWithError';
 import { Redirect } from 'react-router-dom';
+import Loading from '../../Components/Loading';
+import { withStyles } from '@material-ui/core';
 
 type Props = {|
   classes: Object,
+  loading: boolean,
   onSignUp: (user: TLoginUser) => void,
   redirectToChat: boolean,
 |};
@@ -106,52 +108,55 @@ class SignUpForm extends React.Component<Props, State> {
     });
   };
 
-  render = () => {
-    const { classes, redirectToChat } = this.props;
+  render() {
+    const { classes, redirectToChat, loading } = this.props;
     const { userName, password, passwordRepeat } = this.state;
 
     if (redirectToChat) return (<Redirect to='/chat' push />);
 
     return (
-      <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete='off'>
-        <TextField
-          name='userName'
-          label='User Name'
-          className={classes.textField}
-          value={userName.value}
-          error={!!userName.error}
-          helperText={userName.error || ' '}
-          onChange={this.handleOnChange}
-          margin='normal'
-        />
-        <div className={classes.passwords}>
+      <div style={{ position: 'relative' }}>
+        <Loading loading={loading} />
+        <form className={classes.container} onSubmit={this.handleOnSignUp} autoComplete='off'>
           <TextField
-            name='password'
-            label='Password'
+            name='userName'
+            label='User Name'
             className={classes.textField}
-            value={password.value}
-            error={!!password.error}
-            helperText={password.error || ' '}
+            value={userName.value}
+            error={!!userName.error}
+            helperText={userName.error || ' '}
             onChange={this.handleOnChange}
             margin='normal'
-            type='password'
           />
-          <TextField
-            name='passwordRepeat'
-            label='Repeat Password'
-            className={classes.textField}
-            value={passwordRepeat.value}
-            error={!!passwordRepeat.error}
-            helperText={passwordRepeat.error || ' '}
-            onChange={this.handleOnChange}
-            margin='normal'
-            type='password'
-          />
-        </div>
-        <Button type='submit' variant='contained' color='primary' className={classes.submitButton}>
-          Sign up
-        </Button>
-      </form>
+          <div className={classes.passwords}>
+            <TextField
+              name='password'
+              label='Password'
+              className={classes.textField}
+              value={password.value}
+              error={!!password.error}
+              helperText={password.error || ' '}
+              onChange={this.handleOnChange}
+              margin='normal'
+              type='password'
+            />
+            <TextField
+              name='passwordRepeat'
+              label='Repeat Password'
+              className={classes.textField}
+              value={passwordRepeat.value}
+              error={!!passwordRepeat.error}
+              helperText={passwordRepeat.error || ' '}
+              onChange={this.handleOnChange}
+              margin='normal'
+              type='password'
+            />
+          </div>
+          <Button type='submit' variant='contained' color='primary' className={classes.submitButton}>
+            Sign up
+          </Button>
+        </form>
+      </div>
     );
   };
 }

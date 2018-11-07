@@ -11,23 +11,20 @@ import type { TApiChat } from '../../Types/Api/TApiChat';
 import MenuContainer from '../../Components/Layout/MenuContainer';
 import TextAvatar from '../../Components/TextAvatar';
 import type { TApiUser } from '../../Types/Api/TApiUser';
-import withStyles from '@material-ui/core/es/styles/withStyles';
+import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
   appBar: {
-    width: '100%',
+    width: `calc(100% - ${StyleConstants.DrawerWidth}px)`,
     position: 'fixed',
     top: 0,
-    left: 0,
+    left: StyleConstants.DrawerWidth,
     right: 0,
   },
   grow: {
     flexGrow: 1,
   },
-  appBarWithDrawer: {
-    width: `calc(100% - ${StyleConstants.DrawerWidth}px)`,
-    left: StyleConstants.DrawerWidth,
-  },
+  appBarWithDrawer: {},
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
@@ -39,6 +36,9 @@ type Props = {
   activeChat: ?TApiChat,
   isCreator: boolean,
   isChatMember: boolean,
+
+  isLoggingOut: boolean,
+  isFetchChatAction: boolean,
 
   leaveChat: () => void,
   deleteChat: () => void,
@@ -56,13 +56,16 @@ class Menu extends React.Component<Props> {
     this.props.deleteChat(this.props.activeChat._id);
   };
 
-  render = () => {
+  render() {
     const {
       user,
       activeChat,
       classes,
       isCreator,
       isChatMember,
+
+      isLoggingOut,
+      isFetchChatAction,
 
       logout,
     } = this.props;
@@ -83,11 +86,11 @@ class Menu extends React.Component<Props> {
             {activeChat.title}
           </Typography>
           {isChatMember && (isCreator ? (
-            <Button color='inherit' onClick={this.handleOnClickDeleteChat}>Delete Chat</Button>
+            <Button color='inherit' onClick={this.handleOnClickDeleteChat} disabled={isFetchChatAction}>Delete Chat</Button>
           ) : (
-            <Button color='inherit' onClick={this.handleOnClickLeaveChat}>Leave Chat</Button>
+            <Button color='inherit' onClick={this.handleOnClickLeaveChat} disabled={isFetchChatAction}>Leave Chat</Button>
           ))}
-          <Button color='inherit' onClick={logout}>Logout</Button>
+          <Button color='inherit' disabled={isLoggingOut} onClick={logout}>Logout</Button>
         </Toolbar>
       </AppBar>
     );

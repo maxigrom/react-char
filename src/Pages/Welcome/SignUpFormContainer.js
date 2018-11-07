@@ -7,6 +7,7 @@ import { signUp } from '../../Redux/Auth/AuthActions';
 
 const mapStateToProps = (state: TStore) => {
   return {
+    loading: state.services.isFetching.signup,
     redirectToChat: state.auth.isAuthenticated,
   };
 };

@@ -6,11 +6,14 @@ import Layout from '../Components/Layout';
 import ChatList from './Chat/ChatList';
 import type { TApiUser } from '../Types/Api/TApiUser';
 import type { TApiChat } from '../Types/Api/TApiChat';
+import type { RouterState } from 'conn';
 import Menu from './Chat/Menu';
 import type { TApiChatMessage } from '../Types/Api/TApiChatMessage';
 import NewMessage from './Chat/NewMessage';
 import JoinChatButton from './Chat/JoinChatButton';
-import withStyles from '@material-ui/core/es/styles/withStyles';
+import { withStyles } from '@material-ui/core';
+import type { TServiceFetchingState } from '../Redux/Services/ServiceReducer';
+import Loading from '../Components/Loading';
 
 type Props = {
   user: ?TApiUser,
@@ -19,9 +22,16 @@ type Props = {
   allChats: TApiChat[],
   messages: TApiChatMessage[],
 
-  isMember: (chat: ?TApiChat) => bool,
-  isCreator: (chat: ?TApiChat) => bool,
-  isChatMember: (chat: ?TApiChat) => bool,
+  isFetching: TServiceFetchingState,
+  isFetchingChat: boolean,
+  isFetchingChatActions: boolean,
+  isConnected: boolean,
+
+  router: RouterState,
+
+  isMember: (chat: ?TApiChat) => boolean,
+  isCreator: (chat: ?TApiChat) => boolean,
+  isChatMember: (chat: ?TApiChat) => boolean,
 
   fetchAllChats: () => void,
   fetchMyChats: () => void,
@@ -30,8 +40,17 @@ type Props = {
   joinChat: (chatId: string) => void,
   leaveChat: (chatId: string) => void,
   deleteChat: (chatId: string) => void,
+
+  socketsConnect: () => void,
+  mountChat: (chatId) => void,
+  unmountChat: (chatId) => void,
   sendMessage: (chatId: string, messageText: string) => void,
+
   logout: () => void,
+};
+
+type State = {
+  socketIntervalId: ?number
 };
 
 const styles = theme => ({
@@ -40,8 +59,96 @@ const styles = theme => ({
   },
 });
 
+const getChatId = (path: string): ?string => {
+  const params = path.toLowerCase().split('/')
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+
+  if (params.length < 2 || params[1].length === 0) return null;
+  return params[1];
+};
+
+const WRAPPER_ID = 'messagesWrapper';
+
 class Chat extends React.Component<Props> {
   props: Props;
+
+  state = {
+    socketIntervalId: 0,
+  };
+
+  componentDidMount() {
+    const {
+      fetchAllChats,
+      fetchMyChats,
+      setActiveChat,
+      socketsConnect,
+      mountChat,
+    } = this.props;
+
+    Promise.all([fetchAllChats(), fetchMyChats()]).then(() => {
+      socketsConnect();
+    }).then(() => {
+      const id = getChatId(this.props.router.location.pathname);
+
+      if (id) {
+        setActiveChat(id);
+        mountChat(id);
+      }
+    });
+
+    this.scrollToBottom();
+  }
+
+  componentWillUnmount() {
+    this.stopSocketConnecting();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { setActiveChat, unmountChat, mountChat } = this.props;
+
+    const currentId = getChatId(this.props.router.location.pathname);
+    const nextId = getChatId(nextProps.router.location.pathname);
+
+    if (this.props.isConnected && !nextProps.isConnected) {
+      this.runSocketConnecting();
+    }
+
+    if (!this.props.isConnected && nextProps.isConnected) {
+      this.stopSocketConnecting();
+    }
+
+    if (nextId && currentId !== nextId) {
+      setActiveChat(nextId);
+      unmountChat(currentId);
+      mountChat(nextId);
+    }
+  }
+
+  runSocketConnecting = () => {
+    this.setState((prevState: State) => {
+      if (prevState.socketIntervalId !== null) clearInterval(prevState.socketIntervalId);
+
+      return {
+        socketIntervalId: setInterval(this.props.socketsConnect, 10000),
+      };
+    });
+  };
+
+  stopSocketConnecting = () => {
+    if (this.state.socketIntervalId === null) return;
+
+    this.setState((prevState: State) => {
+      clearInterval(prevState.socketIntervalId);
+      return {
+        socketIntervalId: null,
+      };
+    });
+  };
 
   handleOnSendMessage = (messageText: string) => {
     this.props.sendMessage(this.props.activeChat._id, messageText);
@@ -51,17 +158,25 @@ class Chat extends React.Component<Props> {
     this.props.joinChat(this.props.activeChat._id);
   };
 
-  getBottomController = () => {
+  scrollToBottom = () => {
+    const messagesWrapper = document.querySelector(`#${WRAPPER_ID}`);
+    if (messagesWrapper) {
+      messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
+    }
+  };
+
+  getBottomController = (isFetchingChatActions) => {
     const { isChatMember, activeChat } = this.props;
+    const loading = this.props.isFetchingChat || this.props.isFetchingChatActions;
 
     return isChatMember(activeChat) ? (
-      <NewMessage activeChat={activeChat} onSendMessage={this.handleOnSendMessage} />
+      <NewMessage activeChat={activeChat} onSendMessage={this.handleOnSendMessage} loading={loading} />
     ) : (
-      <JoinChatButton onClick={this.handleOnClickJoinChat} />
+      <JoinChatButton onClick={this.handleOnClickJoinChat} loading={loading} />
     );
   };
 
-  render = () => {
+  render() {
     const {
       classes,
       user,
@@ -70,14 +185,14 @@ class Chat extends React.Component<Props> {
       allChats,
       messages,
 
-      isMember,
+      isFetching,
+      isFetchingChat,
+      isConnected,
+
       isCreator,
       isChatMember,
 
-      fetchAllChats,
-      fetchMyChats,
       createChat,
-      setActiveChat,
       logout,
 
       leaveChat,
@@ -86,14 +201,14 @@ class Chat extends React.Component<Props> {
 
     return (
       <>
-      <Layout.Drawer>
+      <Loading loading={isFetching.logout} />
+      <Loading loading={!isConnected} message='We have lost a connection :(' />
+      <Layout.Drawer loading={isFetchingChat}>
         <ChatList
           activeChat={activeChat}
           myChats={myChats}
           allChats={allChats}
-          fetchAllChats={fetchAllChats}
-          fetchMyChats={fetchMyChats}
-          setActiveChat={setActiveChat}
+          disabled={isFetchingChat}
           createChat={createChat}
         />
       </Layout.Drawer>
@@ -104,9 +219,11 @@ class Chat extends React.Component<Props> {
         isChatMember={isChatMember(activeChat)}
         leaveChat={leaveChat}
         deleteChat={deleteChat}
+        isFetchChatAction={isFetching.leaveChat || isFetching.deleteChat}
+        isLoggingOut={isFetching.logout}
         logout={logout}
       />
-      <Layout.Body showDrawer>
+      <Layout.Body id={WRAPPER_ID} showDrawer>
         <Grid
           container
           spacing={16}
@@ -115,7 +232,7 @@ class Chat extends React.Component<Props> {
           alignItems={'flex-start'}
         >
           {messages.map((chatMessage, i) => (
-            <Grid item xs={12} key={i}>
+            <Grid item xs={12} key={i} style={chatMessage.statusMessage ? { width: '100%' } : null}>
               <ChatMessage
                 chatMessage={chatMessage}
                 isCurrentUser={chatMessage.sender._id === user._id}
@@ -128,6 +245,6 @@ class Chat extends React.Component<Props> {
       </>
     );
   };
-};
+}
 
 export default withStyles(styles)(Chat);

@@ -11,7 +11,7 @@ type Props = {
 
 class PrivateRoute extends React.Component<Props> {
   props: Props;
-  
+
   renderRoute = (routeProps: Object) => {
     if (!this.props.isAuthenticated) {
       return (
@@ -27,7 +27,7 @@ class PrivateRoute extends React.Component<Props> {
     return React.createElement(this.props.component, routeProps, null);
   };
 
-  render = () => {
+  render() {
     return <Route render={this.renderRoute} />;
   };
 }

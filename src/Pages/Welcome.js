@@ -40,7 +40,7 @@ class Welcome extends React.Component<Props, State> {
     this.setState({ tabIndex: index });
   };
 
-  render = () => {
+  render() {
     const { classes, theme } = this.props;
     const { tabIndex } = this.state;
 

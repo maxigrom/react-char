@@ -7,9 +7,11 @@ import type { TLoginUser } from '../../Types/TLoginUser';
 import type { TValueWithError } from '../../Models/ValueWithError';
 import { newValueWithError } from '../../Models/ValueWithError';
 import { Redirect } from 'react-router-dom';
+import Loading from '../../Components/Loading';
 
 type Props = {|
   classes: Object,
+  loading: boolean,
   redirectToChat: boolean,
   onLogin: (user: TLoginUser) => void,
 |};
@@ -85,39 +87,42 @@ class LoginForm extends React.Component<Props, State> {
     });
   };
 
-  render = () => {
-    const { classes, redirectToChat } = this.props;
+  render() {
+    const { classes, redirectToChat, loading } = this.props;
     const { userName, password } = this.state;
 
     if (redirectToChat) return (<Redirect to='/chat' push />);
 
     return (
-      <form className={classes.container} onSubmit={this.handleOnLogin} autoComplete='off'>
-        <TextField
-          name='userName'
-          label='User Name'
-          className={classes.textField}
-          value={userName.value}
-          error={!!userName.error}
-          helperText={userName.error || ' '}
-          onChange={this.handleOnChange}
-          margin='normal'
-        />
-        <TextField
-          name='password'
-          label='Password'
-          className={classes.textField}
-          value={password.value}
-          error={!!password.error}
-          helperText={password.error || ' '}
-          onChange={this.handleOnChange}
-          margin='normal'
-          type='password'
-        />
-        <Button type='submit' variant='contained' color='primary' className={classes.submitButton}>
-          Log in
-        </Button>
-      </form>
+      <div style={{ position: 'relative' }}>
+        <Loading loading={loading} />
+        <form className={classes.container} onSubmit={this.handleOnLogin} autoComplete='off'>
+          <TextField
+            name='userName'
+            label='User Name'
+            className={classes.textField}
+            value={userName.value}
+            error={!!userName.error}
+            helperText={userName.error || ' '}
+            onChange={this.handleOnChange}
+            margin='normal'
+          />
+          <TextField
+            name='password'
+            label='Password'
+            className={classes.textField}
+            value={password.value}
+            error={!!password.error}
+            helperText={password.error || ' '}
+            onChange={this.handleOnChange}
+            margin='normal'
+            type='password'
+          />
+          <Button type='submit' variant='contained' color='primary' className={classes.submitButton}>
+            Log in
+          </Button>
+        </form>
+      </div>
     );
   };
 }

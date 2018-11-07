@@ -1,6 +1,7 @@
 // @flow
 import { combineReducers } from 'redux';
 import * as types from './ChatActionTypes';
+import * as sockets from '../Sockets/SocketsActionTypes';
 
 export type TChatState = {|
   activeId: ?string,
@@ -29,6 +30,9 @@ const activeId = (state = initialState.activeId, action) => {
     case types.DELETE_CHAT.SUCCESS:
       return null;
 
+    case sockets.RECIEVE_DELETED_CHAT:
+      return state === getChatId(action.payload.chat) ? null : state;
+
     default:
       return state;
   }
@@ -36,12 +40,14 @@ const activeId = (state = initialState.activeId, action) => {
 
 const ids = (state = initialState.ids, action) => {
   switch (action.type) {
+    case sockets.RECIEVE_NEW_CHAT:
     case types.FETCH_ALL_CHATS.SUCCESS:
       return action.payload.chats.map(getChatId);
 
     case types.CREATE_CHAT.SUCCESS:
       return [...state, getChatId(action.payload.chat)];
 
+    case sockets.RECIEVE_DELETED_CHAT:
     case types.DELETE_CHAT.SUCCESS:
       return state.filter(chatId => chatId !== getChatId(action.payload.chat));
 
@@ -79,12 +85,16 @@ const chatMap = (state = initialState.chatMap, action) => {
         }), {}),
       };
 
+    case sockets.RECIEVE_NEW_CHAT:
     case types.CREATE_CHAT.SUCCESS:
+    case types.JOIN_CHAT.SUCCESS:
+    case types.LEAVE_CHAT.SUCCESS:
       return {
         ...state,
         [getChatId(action.payload.chat)]: action.payload.chat,
       };
 
+    case sockets.RECIEVE_DELETED_CHAT:
     case types.DELETE_CHAT.SUCCESS:
       const newState = { ...state };
       delete newState[getChatId(action.payload.chat)];

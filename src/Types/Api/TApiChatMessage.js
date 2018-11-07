@@ -6,7 +6,7 @@ export type TApiChatMessage = {
   updatedAt: string,
   createdAt: string,
   content: string,
-  statusMessage: boolean,
+  statusMessage?: boolean,
   chatId: string,
   sender: TApiUserInfo,
   __v: number

@@ -4,6 +4,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import MUIDrawer from '@material-ui/core/Drawer';
 import StyleConstants from '../../Consts/StyleConstants';
+import Loading from '../Loading';
 
 const styles = theme => ({
   drawer: {
@@ -17,13 +18,15 @@ const styles = theme => ({
 });
 
 type Props = {
-  children: React.Node
+  children: React.Node,
+  loading?: boolean,
 };
 
 const Drawer = (props: Props) => {
-  const { children, classes } = props;
+  const { children, classes, loading } = props;
 
   return (
+    <>
     <MUIDrawer
       anchor='left'
       variant='permanent'
@@ -33,7 +36,9 @@ const Drawer = (props: Props) => {
       }}
     >
       {children}
+      <Loading loading={loading} />
     </MUIDrawer>
+    </>
   );
 };
 

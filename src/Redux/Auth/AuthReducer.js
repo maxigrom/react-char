@@ -1,7 +1,7 @@
 // @flow
 import type { TApiUser } from '../../Types/Api/TApiUser';
 import LocalStorageHelper from '../../Helpers/LocalStorageHelper';
-import { LOGIN, LOGOUT, RECEIVE_AUTH, SIGN_UP } from './AuthActionTypes';
+import { LOGIN, LOGOUT, RECEIVE_AUTH, SIGNUP } from './AuthActionTypes';
 
 export type TAuthState = {|
   user: ?TApiUser,
@@ -21,12 +21,12 @@ const AuthReducer = (state: TAuthState = initialState, action): TAuthState => {
   switch (action.type) {
     case LOGIN.REQUEST:
     case LOGOUT.REQUEST:
-    case SIGN_UP.REQUEST:
+    case SIGNUP.REQUEST:
     case RECEIVE_AUTH.REQUEST:
       return state;
 
     case LOGIN.SUCCESS:
-    case SIGN_UP.SUCCESS:
+    case SIGNUP.SUCCESS:
       return {
         ...state,
         user: action.payload.user,
@@ -44,7 +44,7 @@ const AuthReducer = (state: TAuthState = initialState, action): TAuthState => {
     case LOGOUT.SUCCESS:
     case LOGIN.FAILURE:
     case LOGOUT.FAILURE:
-    case SIGN_UP.FAILURE:
+    case SIGNUP.FAILURE:
     case RECEIVE_AUTH.FAILURE:
       return {
         ...state,

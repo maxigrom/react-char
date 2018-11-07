@@ -1,91 +1,50 @@
 // @flow
-import type { TStore } from '../RootReducer';
 import type { TLoginUser } from '../../Types/TLoginUser';
 import type { TSignUpJson } from '../../Types/Api/Jsons/TSignUpJson';
 import AuthApi from '../../Api/AuthApi';
 import LocalStorageHelper from '../../Helpers/LocalStorageHelper';
-import * as NotificationActions from '../Notification/NotificationActions';
-import { LOGIN, LOGOUT, SIGN_UP, RECEIVE_AUTH } from './AuthActionTypes';
+import { LOGIN, LOGOUT, RECEIVE_AUTH, SIGNUP } from './AuthActionTypes';
 import UsersApi from '../../Api/UsersApi';
-import type { TUserJson } from '../../Types/Api/Jsons/TUserJson';
-import type { FGetState } from '../../Types/Redux/FGetState';
-import { push_success } from '../Notification/NotificationActions';
-import { dispatchErrors } from '../../Helpers/ReduxHelper';
+import { sendRequest } from '../Actions/baseActions';
 
-export const signUp = (user: TLoginUser) => (dispatch) => {
-  const actionType = SIGN_UP;
+export const signUp = (user: TLoginUser) => {
+  const signUpPromiseFunction = () => (
+    AuthApi.signup(user).then((json: TSignUpJson) => {
+      if (!json.token) throw new Error('Token has not been provided!');
 
-  dispatch({ type: actionType.REQUEST });
+      LocalStorageHelper.setAuthToken(json.token);
+      return json;
+    })
+  );
 
-  return AuthApi.signup(user).then((json: TSignUpJson) => {
-    if (!json.token) throw new Error('Token has not been provided!');
-
-    LocalStorageHelper.setAuthToken(json.token);
-
-    dispatch(push_success(json.message));
-
-    dispatch({
-      type: actionType.SUCCESS,
-      payload: json,
-    });
-  }).catch(reason => {
-    dispatchErrors(dispatch, actionType, reason);
-  });
+  return sendRequest(SIGNUP, signUpPromiseFunction, 'signup');
 };
 
-export const login = (user: TLoginUser) => (dispatch) => {
-  const actionType = LOGIN;
+export const login = (user: TLoginUser) => {
+  const loginPromiseFunction = () => (
+    AuthApi.login(user).then((json: TSignUpJson) => {
+      if (!json.token) throw new Error('Token has not been provided!');
 
-  dispatch({ type: actionType.REQUEST });
+      LocalStorageHelper.setAuthToken(json.token);
+      return json;
+    })
+  );
 
-  return AuthApi.login(user).then((json: TSignUpJson) => {
-    if (!json.token) throw new Error('Token has not been provided!');
-
-    LocalStorageHelper.setAuthToken(json.token);
-
-    dispatch(push_success(json.message));
-
-    dispatch({
-      type: actionType.SUCCESS,
-      payload: json,
-    });
-  }).catch(reason => {
-    dispatchErrors(dispatch, actionType, reason);
-  });
+  return sendRequest(LOGIN, loginPromiseFunction, 'login');
 };
 
-export const logout = () => (dispatch) => {
-  const actionType = LOGOUT;
+export const logout = () => {
+  const logoutPromiseFunction = () => (
+    AuthApi.logout().then((json: TSignUpJson) => {
+      LocalStorageHelper.removeAuthKey();
+      return json;
+    })
+  );
 
-  dispatch({ type: actionType.REQUEST });
-
-  return AuthApi.logout().then((json: TSignUpJson) => {
-    LocalStorageHelper.removeAuthKey();
-
-    dispatch(push_success(json.message));
-
-    dispatch({
-      type: actionType.SUCCESS,
-      payload: json,
-    });
-  }).catch(reason => {
-    dispatchErrors(dispatch, actionType, reason);
-  });
+  return sendRequest(LOGOUT, logoutPromiseFunction, 'logout');
 };
 
-export const receiveAuth = () => (dispatch, getState: FGetState) => {
-  const actionType = RECEIVE_AUTH;
-
-  const { token } = getState().auth;
-  if(token == null) return dispatch({ type: actionType.FAILURE });
-
-  dispatch({ type: actionType.REQUEST });
-  return UsersApi.getCurrentUser(token).then((json: TUserJson) => {
-    dispatch({
-      type: actionType.SUCCESS,
-      payload: json,
-    });
-  }).catch(reason => {
-    dispatchErrors(dispatch, actionType, reason);
-  });
+export const receiveAuth = () => {
+  const receiveAuthPromiseFunction = (token) => UsersApi.getCurrentUser(token);
+  return sendRequest(RECEIVE_AUTH, receiveAuthPromiseFunction, 'receiveAuth');
 };

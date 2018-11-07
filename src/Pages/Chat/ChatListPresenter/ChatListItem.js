@@ -5,28 +5,34 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DateHelper from '../../../Helpers/DateHelper';
 import TextAvatar from '../../../Components/TextAvatar';
 import type { TApiChat } from '../../../Types/Api/TApiChat';
+import { Route } from 'react-router-dom';
 
 type Props = {
   chat: TApiChat,
-  onClick: (chatId: string) => void,
+  disabled: boolean,
   isActive: boolean,
 };
 
 class ChatListItem extends React.Component<Props> {
   props: Props;
 
-  handleOnClick = () => {
-    this.props.onClick(this.props.chat._id);
+  handleOnClick = (history, chat) => () => {
+    if (this.props.disabled) return;
+    history.push(`/chat/${chat._id}`);
   };
 
-  render = () => {
-    const { chat, isActive } = this.props;
+  render() {
+    const { chat, disabled, isActive } = this.props;
 
     return (
-      <ListItem button selected={isActive} onClick={this.handleOnClick}>
-        <TextAvatar value={chat.title} />
-        <ListItemText primary={chat.title} secondary={DateHelper.toStringFromNow(chat.updatedAt)} />
-      </ListItem>
+      <Route
+        render={({ history }) => (
+          <ListItem button selected={isActive} onClick={this.handleOnClick(history, chat)} disabled={disabled}>
+            <TextAvatar value={chat.title} />
+            <ListItemText primary={chat.title} secondary={DateHelper.toStringFromNow(chat.updatedAt)} />
+          </ListItem>
+        )}
+      />
     );
   };
 }

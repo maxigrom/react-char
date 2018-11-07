@@ -37,7 +37,7 @@ type Props = {
 class ChatMessage extends React.Component<Props> {
   props: Props;
 
-  render = () => {
+  render() {
     const { chatMessage, isCurrentUser, classes } = this.props;
     if (chatMessage.statusMessage) return (<StatusMessage chatMessage={chatMessage} />);
 
