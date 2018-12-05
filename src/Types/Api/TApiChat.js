@@ -13,5 +13,5 @@ export type TApiChat = {
   },
   title: string,
   members: TApiUserInfo[],
-  __v: number
-}
+  __v: number,
+};

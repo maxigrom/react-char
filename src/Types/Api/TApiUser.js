@@ -6,4 +6,3 @@ export type TApiUser = TApiUserInfo & {
   chats: mixed[],
   messagesCount: number,
 };
-

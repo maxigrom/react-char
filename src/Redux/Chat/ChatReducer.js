@@ -17,6 +17,16 @@ const initialState: TChatState = {
   chatMap: {},
 };
 
+export const getChatId = chat => chat._id;
+export const getById = (state, id) => state.chatMap[id];
+export const getByIds = (state, ids) => [].concat(ids).map(id => getById(state, id)).filter(chat => !!chat);
+
+function deleteChatById(state, chatId) {
+  const newState = { ...state };
+  delete newState[chatId];
+  return newState;
+}
+
 const activeId = (state = initialState.activeId, action) => {
   switch (action.type) {
     case types.SET_ACTIVE_CHAT:
@@ -79,10 +89,13 @@ const chatMap = (state = initialState.chatMap, action) => {
     case types.FETCH_MY_CHATS.SUCCESS:
       return {
         ...state,
-        ...action.payload.chats.reduce((chatMap, chat) => ({
-          ...chatMap,
-          [getChatId(chat)]: chat,
-        }), {}),
+        ...action.payload.chats.reduce(
+          (map, chat) => ({
+            ...map,
+            [getChatId(chat)]: chat,
+          }),
+          {},
+        ),
       };
 
     case sockets.RECIEVE_NEW_CHAT:
@@ -96,9 +109,7 @@ const chatMap = (state = initialState.chatMap, action) => {
 
     case sockets.RECIEVE_DELETED_CHAT:
     case types.DELETE_CHAT.SUCCESS:
-      const newState = { ...state };
-      delete newState[getChatId(action.payload.chat)];
-      return newState;
+      return deleteChatById(state, getChatId(action.payload.chat));
 
     default:
       return state;
@@ -111,7 +122,3 @@ export default combineReducers({
   myIds,
   chatMap,
 });
-
-export const getChatId = chat => chat._id;
-export const getById = (state, id) => state.chatMap[id];
-export const getByIds = (state, ids) => [].concat(ids).map(id => getById(state, id));

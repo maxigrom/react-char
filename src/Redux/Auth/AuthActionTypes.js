@@ -1,4 +1,4 @@
-//@flow
+// @flow
 import createRequestAction from '../createRequestAction';
 
 export const SIGNUP = createRequestAction('auth/SIGNUP');

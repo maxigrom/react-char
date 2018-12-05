@@ -10,46 +10,30 @@ export type TChatsJson = {
 } & TBaseApiJson;
 
 export type TChatJson = {
-  chat: TApiChat
+  chat: TApiChat,
 } & TBaseApiJson;
 
 class ChatsApi {
-  static fetchAllChats = async (token: string) => {
-    return API.getWithToken('/chats', token);
-  };
+  static fetchAllChats = async (token: string) => API.getWithToken('/chats', token);
 
-  static fetchMyChats = async (token: string) => {
-    return API.getWithToken('/chats/my', token);
-  };
+  static fetchMyChats = async (token: string) => API.getWithToken('/chats/my', token);
 
-  static fetchChat = async (token: string, chatId: string) => {
-    return API.getWithToken(`/chats/${chatId}`, token);
-  };
+  static fetchChat = async (token: string, chatId: string) => API.getWithToken(`/chats/${chatId}`, token);
 
-  static createChat = async (token: string, title: string) => {
-    return API.postWithToken('/chats', token, { data: { title } });
-  };
+  static createChat = async (token: string, title: string) => API.postWithToken('/chats', token, { data: { title } });
 
-  static joinChat = async (token: string, chatId: string) => {
-    return API.getWithToken(`/chats/${chatId}/join`, token);
-  };
+  static joinChat = async (token: string, chatId: string) => API.getWithToken(`/chats/${chatId}/join`, token);
 
-  static leaveChat = async (token: string, chatId: string) => {
-    return API.getWithToken(`/chats/${chatId}/leave`, token);
-  };
+  static leaveChat = async (token: string, chatId: string) => API.getWithToken(`/chats/${chatId}/leave`, token);
 
-  static deleteChat = async (token: string, chatId: string) => {
-    return API.deleteWithToken(`/chats/${chatId}`, token);
-  };
+  static deleteChat = async (token: string, chatId: string) => API.deleteWithToken(`/chats/${chatId}`, token);
 
-  static sendMessage = async (token: string, chatId: string, messageText: string) => {
-    return API.postWithToken(`/chats/${chatId}`, token, {
-      data: {
-        content: messageText,
-        statusMessage: false,
-      },
-    });
-  };
+  static sendMessage = async (token: string, chatId: string, messageText: string) => API.postWithToken(`/chats/${chatId}`, token, {
+    data: {
+      content: messageText,
+      statusMessage: false,
+    },
+  });
 }
 
 export default ChatsApi;

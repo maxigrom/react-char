@@ -9,5 +9,5 @@ export type TApiChatMessage = {
   statusMessage?: boolean,
   chatId: string,
   sender: TApiUserInfo,
-  __v: number
-}
+  __v: number,
+};

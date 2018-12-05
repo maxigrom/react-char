@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Meow /> renders correctly 1`] = `
+<div
+  className="MuiAvatar-root-4"
+>
+  <img
+    alt="Meow!"
+    className="MuiAvatar-img-6"
+    src="/assets/favicon.jpg"
+  />
+</div>
+`;

@@ -1,20 +1,20 @@
 import merge from 'webpack-merge';
-import { getBaseConfig, distPath } from './webpack.config.babel';
+import { getBaseConfig } from './webpack.config.babel';
 
 module.exports = merge(getBaseConfig(), {
-    mode: 'development',
+  mode: 'development',
 
-    output: {
-        publicPath: '/'
-    },
+  output: {
+    publicPath: '/',
+  },
 
-    devServer: {
-        host: 'localhost',
-        port: 8080,
-        hotOnly: true,
-        open: true,
-        inline: true,
-        historyApiFallback: true,
-        publicPath: '/',
-    }
+  devServer: {
+    host: 'localhost',
+    port: 8080,
+    hotOnly: true,
+    open: true,
+    inline: true,
+    historyApiFallback: true,
+    publicPath: '/',
+  },
 });

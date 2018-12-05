@@ -19,7 +19,7 @@ export const distPath = 'build';
 export const absoluteDistPath = path.resolve('./', distPath);
 
 export const getBaseConfig = (minimize = false) => ({
-  entry: './src/index.js',
+  entry: './src/index.jsx',
 
   output: {
     path: absoluteDistPath,
@@ -41,7 +41,7 @@ export const getBaseConfig = (minimize = false) => ({
           {
             // translates CSS into CommonJS
             loader: 'css-loader',
-            options: { minimize: minimize },
+            options: { minimize },
           },
         ],
       },

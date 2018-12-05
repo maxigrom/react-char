@@ -29,7 +29,7 @@ class PrivateRoute extends React.Component<Props> {
 
   render() {
     return <Route render={this.renderRoute} />;
-  };
+  }
 }
 
 const mapStateToProps = (state: TStore) => ({
